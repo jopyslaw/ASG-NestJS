@@ -1,0 +1,35 @@
+import { Controller } from '@nestjs/common';
+import { MessagePattern, Payload } from '@nestjs/microservices';
+import { ParticipantsService } from './participants.service';
+import { CreateParticipantDto } from './dto/create-participant.dto';
+import { UpdateParticipantDto } from './dto/update-participant.dto';
+
+@Controller()
+export class ParticipantsController {
+  constructor(private readonly participantsService: ParticipantsService) {}
+
+  @MessagePattern('createParticipant')
+  create(@Payload() createParticipantDto: CreateParticipantDto) {
+    return this.participantsService.create(createParticipantDto);
+  }
+
+  @MessagePattern('findAllParticipants')
+  findAll() {
+    return this.participantsService.findAll();
+  }
+
+  @MessagePattern('findOneParticipant')
+  findOne(@Payload() id: number) {
+    return this.participantsService.findOne(id);
+  }
+
+  @MessagePattern('updateParticipant')
+  update(@Payload() updateParticipantDto: UpdateParticipantDto) {
+    return this.participantsService.update(updateParticipantDto.id, updateParticipantDto);
+  }
+
+  @MessagePattern('removeParticipant')
+  remove(@Payload() id: number) {
+    return this.participantsService.remove(id);
+  }
+}
