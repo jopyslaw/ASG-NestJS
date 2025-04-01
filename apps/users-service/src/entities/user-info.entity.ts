@@ -16,11 +16,6 @@ export class UserInfo {
   surname: string;
 
   @Column({
-    nullable: true,
-  })
-  email: string;
-
-  @Column({
     unique: true,
     nullable: false,
   })

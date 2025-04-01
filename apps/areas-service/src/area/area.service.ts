@@ -12,8 +12,14 @@ export class AreaService {
   ) {}
 
   async create(createAreaDto: CreateAreaDto) {
-    const areaData = { ...createAreaDto };
-    const area = this.areaRepository.create(areaData);
+    const areaDtoData = {
+      name: createAreaDto.name,
+      number_of_fields: createAreaDto.number_of_fields,
+      owner_id: createAreaDto.user_id,
+      coordinates_of_place: createAreaDto.coordinates_of_place,
+    };
+
+    const area = this.areaRepository.create(areaDtoData);
     return await this.areaRepository.save(area);
   }
 
@@ -35,11 +41,19 @@ export class AreaService {
     return area;
   }
 
-  update(id: number, updateAreaDto: UpdateAreaDto) {
-    return `This action updates a #${id} area`;
+  async update(id: number, updateAreaDto: UpdateAreaDto) {
+    const area = await this.findOne(id).catch((error) => {
+      if (error) {
+        console.log('Error occured:', error.message);
+      }
+    });
+
+    return await this.areaRepository.update(id, updateAreaDto);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} area`;
+  async remove(id: number) {
+    const area = await this.findOne(id);
+
+    return await this.areaRepository.remove([area]);
   }
 }

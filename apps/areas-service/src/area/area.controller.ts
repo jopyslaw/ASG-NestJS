@@ -14,16 +14,8 @@ export class AreaController {
   constructor(private readonly areaService: AreaService) {}
 
   @MessagePattern('createArea')
-  //@UsePipes(new ValidationPipe())
   create(@Payload() createAreaDto: CreateAreaDto) {
-    const createAreaDtoWithOwnerId = {
-      name: createAreaDto.name,
-      number_of_fields: createAreaDto.number_of_fields,
-      coordinates_of_place: createAreaDto.coordinates_of_place,
-      owner_id: createAreaDto.user_id,
-    };
-
-    return this.areaService.create(createAreaDtoWithOwnerId);
+    return this.areaService.create(createAreaDto);
   }
 
   @MessagePattern('findAllArea')

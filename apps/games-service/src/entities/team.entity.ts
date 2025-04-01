@@ -1,5 +1,12 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Game } from './game.entity';
+import { Participant } from './participant.entity';
 
 @Entity()
 export class Team {
@@ -14,9 +21,9 @@ export class Team {
   @Column()
   max_number_of_players: number;
 
-  @Column()
-  acctual_number_of_player: number;
-
   @ManyToOne(() => Game, (game) => game.id, { eager: true })
-  event: Game;
+  game: Game;
+
+  @OneToOne(() => Participant, (participant) => participant.team)
+  participant: Participant;
 }

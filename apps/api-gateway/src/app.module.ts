@@ -13,6 +13,8 @@ import { AreaInfoController } from './area/area-info.controller';
 import { FieldInfoController } from './area/field-info.controller';
 import { UserInfoController } from './user-info/user-info.controller';
 import { GameController } from './game/game.controller';
+import { TeamController } from './game/team.controller';
+import { ParticipantController } from './game/participant.controller';
 
 @Module({
   imports: [
@@ -103,6 +105,8 @@ import { GameController } from './game/game.controller';
     FieldInfoController,
     UserInfoController,
     GameController,
+    TeamController,
+    ParticipantController,
   ],
   providers: [AppService, JwtAuthGuard],
   exports: [JwtAuthGuard],

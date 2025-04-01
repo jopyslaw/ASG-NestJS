@@ -25,7 +25,10 @@ export class ParticipantsController {
 
   @MessagePattern('updateParticipant')
   update(@Payload() updateParticipantDto: UpdateParticipantDto) {
-    return this.participantsService.update(updateParticipantDto.id, updateParticipantDto);
+    return this.participantsService.update(
+      updateParticipantDto.id,
+      updateParticipantDto,
+    );
   }
 
   @MessagePattern('removeParticipant')

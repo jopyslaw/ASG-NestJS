@@ -11,6 +11,7 @@ import dbConfigProd from './config/db.config.prod';
 import { ClientsModule } from '@nestjs/microservices';
 import rabbitmqAreaConfig from './config/rabbitmq-area.config';
 import { MICROSERVICES_CLIENTS } from './constants';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { MICROSERVICES_CLIENTS } from './constants';
       ],
       isGlobal: true,
     }),
+    ScheduleModule.forRoot(),
     GameModule,
     TeamModule,
     ParticipantsModule,

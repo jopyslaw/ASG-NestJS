@@ -1,4 +1,12 @@
-import { Body, Controller, Inject, Post } from '@nestjs/common';
+import { firstValueFrom } from 'rxjs';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Inject,
+  InternalServerErrorException,
+  Post,
+} from '@nestjs/common';
 import { ClientRMQ } from '@nestjs/microservices';
 import { MICROSERVICES_CLIENTS } from 'src/constants';
 
@@ -10,8 +18,10 @@ export class AuthController {
   ) {}
 
   @Post('signup')
-  signUp(@Body() data) {
-    return this.authServiceClient.send('createUser', data);
+  async signUp(@Body() data) {
+    return await firstValueFrom(
+      this.authServiceClient.send('createUser', data),
+    );
   }
 
   @Post('signin')
