@@ -1,14 +1,25 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { RemoveAreaDto } from './dto/remove-area.dto';
+import {
+  ForbiddenException,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateAreaDto } from './dto/create-area.dto';
 import { UpdateAreaDto } from './dto/update-area.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Area } from 'src/entities/area.entity';
 import { Repository } from 'typeorm';
+import { MICROSERVICES_CLIENTS } from 'src/constants';
+import { ClientRMQ } from '@nestjs/microservices';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class AreaService {
   constructor(
     @InjectRepository(Area) private areaRepository: Repository<Area>,
+    @Inject(MICROSERVICES_CLIENTS.GAMES_SERVICE)
+    private gameServiceClient: ClientRMQ,
   ) {}
 
   async create(createAreaDto: CreateAreaDto) {
@@ -41,19 +52,70 @@ export class AreaService {
     return area;
   }
 
-  async update(id: number, updateAreaDto: UpdateAreaDto) {
-    const area = await this.findOne(id).catch((error) => {
-      if (error) {
-        console.log('Error occured:', error.message);
-      }
+  async findOneWithFieldInfoRelations(id: number) {
+    const area = await this.areaRepository.findOne({
+      where: {
+        id,
+      },
+      relations: ['field_info', 'area_info'],
     });
+
+    if (!area) {
+      throw new NotFoundException();
+    }
+
+    return area;
+  }
+
+  async update(id: number, updateAreaDto: UpdateAreaDto) {
+    if (!this.checkIfAreaOwner(updateAreaDto.user_id, id)) {
+      throw new ForbiddenException();
+    }
+
+    const area = await this.findOne(id);
 
     return await this.areaRepository.update(id, updateAreaDto);
   }
 
-  async remove(id: number) {
-    const area = await this.findOne(id);
+  async remove(removeAreaDto: RemoveAreaDto) {
+    if (!this.checkIfAreaOwner(removeAreaDto.user_id, removeAreaDto.id)) {
+      throw new ForbiddenException();
+    }
+
+    const area = await this.findOneWithFieldInfoRelations(removeAreaDto.id);
+
+    if (!area) {
+      throw new NotFoundException();
+    }
+
+    const removeAllGamesDto = {
+      user_id: removeAreaDto.user_id,
+      field_ids: area.field_info.map((field) => field.id),
+    };
+
+    const removedArea = await firstValueFrom(
+      this.gameServiceClient.send('removeAllGames', removeAllGamesDto),
+    ).catch((error) => {
+      if (error.error.statusCode !== 404) {
+        console.log(error);
+      }
+    });
 
     return await this.areaRepository.remove([area]);
+  }
+
+  async checkIfAreaOwner(userId: number, areaId: number) {
+    const area = await this.areaRepository.findOne({
+      where: {
+        id: areaId,
+        owner_id: userId,
+      },
+    });
+
+    if (!area) {
+      throw new NotFoundException();
+    }
+
+    return area.owner_id === userId;
   }
 }

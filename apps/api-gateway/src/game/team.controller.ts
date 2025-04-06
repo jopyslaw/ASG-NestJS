@@ -1,4 +1,12 @@
-import { Body, Controller, Inject, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Inject,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { ClientRMQ } from '@nestjs/microservices';
 import { MICROSERVICES_CLIENTS } from 'src/constants';
 import { JwtAuthGuard } from 'src/guards/jwt-guard/jwt-guard.guard';
@@ -15,5 +23,15 @@ export class TeamController {
   createTeam(@Body() teamData, @Req() req) {
     const gameDataWithUserId = { ...teamData, user_id: req.user.sub };
     return this.gameServiceClient.send('createTeam', gameDataWithUserId);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete('remove-team')
+  removeTeam(@Body() removeTeamData, @Req() req) {
+    const removeTeamDataWithUserId = {
+      ...removeTeamData,
+      user_id: req.user.sub,
+    };
+    return this.gameServiceClient.send('removeTeam', removeTeamDataWithUserId);
   }
 }

@@ -1,9 +1,9 @@
 import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { NotificationService } from './notification.service';
-import { CreateNotificationDto } from './dto/create-notification.dto';
-import { UpdateNotificationDto } from './dto/update-notification.dto';
 import { NewUserMailDto } from './dto/new-user-mail.dto';
+import { GameStatusMailDto } from './dto/game-status-mail.dto';
+import { ForgotPassworMailDto } from './dto/forgot-password-mail.dto';
 
 @Controller()
 export class NotificationController {
@@ -14,31 +14,17 @@ export class NotificationController {
     return this.notificationService.sendNewUserMail(newUserMailDto);
   }
 
-  @MessagePattern('createNotification')
-  create(@Payload() createNotificationDto: CreateNotificationDto) {
-    return this.notificationService.create(createNotificationDto);
+  @MessagePattern('sendGameStatusMail')
+  sendGamesStatusMail(@Payload() gameStatusMail: GameStatusMailDto) {
+    return this.notificationService.sendGameStatusMail(gameStatusMail);
   }
 
-  @MessagePattern('findAllNotification')
-  findAll() {
-    return this.notificationService.findAll();
-  }
-
-  @MessagePattern('findOneNotification')
-  findOne(@Payload() id: number) {
-    return this.notificationService.findOne(id);
-  }
-
-  @MessagePattern('updateNotification')
-  update(@Payload() updateNotificationDto: UpdateNotificationDto) {
-    return this.notificationService.update(
-      updateNotificationDto.id,
-      updateNotificationDto,
+  @MessagePattern('sendForgotPasswordMail')
+  sendForgotPasswordMail(
+    @Payload() forgotPasswordMailDto: ForgotPassworMailDto,
+  ) {
+    return this.notificationService.sendForgotPasswordMail(
+      forgotPasswordMailDto,
     );
-  }
-
-  @MessagePattern('removeNotification')
-  remove(@Payload() id: number) {
-    return this.notificationService.remove(id);
   }
 }

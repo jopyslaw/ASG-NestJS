@@ -22,6 +22,15 @@ import { MICROSERVICES_CLIENTS } from './constants';
       useFactory:
         process.env.NODE_ENV === 'production' ? dbConfigProd : dbConfigDev,
     }),
+    ClientsModule.registerAsync({
+      clients: [
+        {
+          useFactory: rabbitmqNotificationConfig,
+          name: MICROSERVICES_CLIENTS.NOTIFICATION_SERVICE,
+        },
+      ],
+      isGlobal: true,
+    }),
     UserModule,
     AuthModule,
   ],

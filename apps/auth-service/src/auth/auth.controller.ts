@@ -12,6 +12,7 @@ import { RefreshAuthGuard } from './guards/refresh-auth/refresh-auth.guard';
 import { LocalAuthGuard } from './guards/local-auth/local-auth.guard';
 import { JwtAuthGuard } from './guards/jwt-auth/jwt-auth.guard';
 import { MessagePattern, Payload } from '@nestjs/microservices';
+import { ForgotPasswordDto } from './dto/forgot-password.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -34,5 +35,10 @@ export class AuthController {
   @Post('signout')
   signOut(@Req() req) {
     this.authService.signOut(req.user.id);
+  }
+
+  @MessagePattern('forgotPassword')
+  forgotPassword(@Payload() forgotPasswordDto: ForgotPasswordDto) {
+    return this.authService.forgotPassword(forgotPasswordDto);
   }
 }

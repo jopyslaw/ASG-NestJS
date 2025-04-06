@@ -48,6 +48,6 @@ export class Game {
   })
   active: boolean;
 
-  @OneToMany(() => Team, (team) => team.game)
+  @OneToMany(() => Team, (team) => team.game, { cascade: true })
   team: Team[];
 }

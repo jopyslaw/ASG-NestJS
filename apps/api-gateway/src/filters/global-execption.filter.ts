@@ -12,6 +12,8 @@ export class GlobalRpcExceptionFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
 
+    console.log(exception);
+
     if (exception instanceof HttpException) {
       return response
         .status(exception.getStatus())

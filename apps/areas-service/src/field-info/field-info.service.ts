@@ -12,6 +12,10 @@ import { FieldInfo } from 'src/entities/field-info.entity';
 import { Repository } from 'typeorm';
 import { AreaService } from 'src/area/area.service';
 import { Area } from 'src/entities/area.entity';
+import { RemoveFieldInfoDto } from './dto/remove-field-info.dto';
+import { MICROSERVICES_CLIENTS } from 'src/constants';
+import { ClientRMQ } from '@nestjs/microservices';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class FieldInfoService {
@@ -19,6 +23,8 @@ export class FieldInfoService {
     @InjectRepository(FieldInfo)
     private fieldInfoRepository: Repository<FieldInfo>,
     private areaService: AreaService,
+    @Inject(MICROSERVICES_CLIENTS.GAMES_SERVICE)
+    private gameServiceClient: ClientRMQ,
   ) {}
 
   async create(createFieldInfoDto: CreateFieldInfoDto) {
@@ -58,9 +64,8 @@ export class FieldInfoService {
       where: {
         id,
       },
+      relations: ['area'],
     });
-
-    console.log('FIELD', field);
 
     if (!field) {
       throw new NotFoundException();
@@ -79,11 +84,34 @@ export class FieldInfoService {
     return areas;
   }
 
-  update(id: number, updateFieldInfoDto: UpdateFieldInfoDto) {
-    return `This action updates a #${id} fieldInfo`;
+  async update(id: number, updateFieldInfoDto: UpdateFieldInfoDto) {
+    const field = await this.findOne(id);
+
+    if (field.area.owner_id !== updateFieldInfoDto.user_id) {
+      throw new ForbiddenException();
+    }
+
+    return await this.fieldInfoRepository.update(id, updateFieldInfoDto);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} fieldInfo`;
+  async remove(removeFieldInfoDto: RemoveFieldInfoDto) {
+    const field = await this.findOne(removeFieldInfoDto.id);
+
+    if (field.area.owner_id !== removeFieldInfoDto.user_id) {
+      throw new ForbiddenException();
+    }
+
+    const removeAllGamesDto = {
+      user_id: removeFieldInfoDto.user_id,
+      field_ids: [removeFieldInfoDto.id],
+    };
+
+    const removedArea = await firstValueFrom(
+      this.gameServiceClient.send('removeAllGames', removeAllGamesDto),
+    ).catch((error) => {
+      console.log(error);
+    });
+
+    return await this.fieldInfoRepository.remove([field]);
   }
 }

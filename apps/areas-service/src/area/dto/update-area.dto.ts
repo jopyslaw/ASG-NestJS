@@ -3,4 +3,5 @@ import { CreateAreaDto } from './create-area.dto';
 
 export class UpdateAreaDto extends PartialType(CreateAreaDto) {
   id: number;
+  user_id: number;
 }

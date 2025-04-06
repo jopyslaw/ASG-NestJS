@@ -1,4 +1,12 @@
-import { Body, Controller, Inject, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Inject,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { ClientRMQ } from '@nestjs/microservices';
 import { MICROSERVICES_CLIENTS } from 'src/constants';
 import { JwtAuthGuard } from 'src/guards/jwt-guard/jwt-guard.guard';
@@ -17,6 +25,19 @@ export class FieldInfoController {
     return this.fieldInfoServiceClient.send(
       'createFieldInfo',
       fieldInfoDataWithUser,
+    );
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete('remove-field-info')
+  removeFieldAreaInfo(@Body() removeFieldInfoData: any, @Req() req: any) {
+    const removeFieldInfoDataWithUser = {
+      ...removeFieldInfoData,
+      user_id: req.user.sub,
+    };
+    return this.fieldInfoServiceClient.send(
+      'removeFieldInfo',
+      removeFieldInfoDataWithUser,
     );
   }
 }

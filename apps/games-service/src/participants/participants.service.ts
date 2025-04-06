@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ForbiddenException,
   Inject,
   Injectable,
   NotFoundException,
@@ -13,6 +14,8 @@ import { MICROSERVICES_CLIENTS } from 'src/constants';
 import { ClientRMQ } from '@nestjs/microservices';
 import { TeamService } from 'src/team/team.service';
 import { firstValueFrom } from 'rxjs';
+import { GameService } from 'src/game/game.service';
+import { RemoveParticipantDto } from './dto/remove-participant.dto';
 
 @Injectable()
 export class ParticipantsService {
@@ -35,6 +38,8 @@ export class ParticipantsService {
 
     const team = await this.teamService.findOne(createParticipantDto.team_id);
 
+    console.log(team);
+
     if (!team.game.active) {
       throw new BadRequestException();
     }
@@ -42,6 +47,8 @@ export class ParticipantsService {
     const acctualParticipantsInTeam = (
       await this.teamService.findAllByTeamId(createParticipantDto.team_id)
     ).length;
+
+    console.log(team);
 
     if (acctualParticipantsInTeam >= team.max_number_of_players) {
       throw new BadRequestException();
@@ -61,15 +68,73 @@ export class ParticipantsService {
     return `This action returns all participants`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} participant`;
+  async findOne(id: number) {
+    const participant = await this.participantRepository.findOne({
+      where: {
+        id,
+      },
+    });
+
+    if (!participant) {
+      throw new NotFoundException();
+    }
+
+    return participant;
   }
 
-  update(id: number, updateParticipantDto: UpdateParticipantDto) {
-    return `This action updates a #${id} participant`;
+  async update(id: number, updateParticipantDto: UpdateParticipantDto) {
+    const participant = await this.findOne(id);
+
+    if (participant.user_id !== updateParticipantDto.user_id) {
+      throw new ForbiddenException();
+    }
+
+    const availableTeams = (
+      await this.teamService.findAllByTeamId(participant.team.game.id)
+    ).filter((item) => item.id !== participant.team.id);
+
+    const numberOfPlayersInTeams = await Promise.all(
+      availableTeams.map(async (team) => ({
+        teamId: team.id,
+        maxPlayersInTeam: team.max_number_of_players,
+        numberOfParticipants: await this.getNumberOfPlayersInTeam(team.id),
+      })),
+    );
+
+    const changeTeamId = numberOfPlayersInTeams.find(
+      (team) => team.teamId === updateParticipantDto.team_id,
+    );
+
+    if (!changeTeamId) {
+      throw new NotFoundException();
+    }
+
+    if (changeTeamId.numberOfParticipants >= changeTeamId.maxPlayersInTeam) {
+      throw new ForbiddenException();
+    }
+
+    return await this.participantRepository.update(id, updateParticipantDto);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} participant`;
+  async remove(removeParticipantDto: RemoveParticipantDto) {
+    const participant = await this.findOne(removeParticipantDto.id);
+
+    if (participant.user_id !== removeParticipantDto.user_id) {
+      throw new ForbiddenException();
+    }
+
+    return await this.participantRepository.remove([participant]);
+  }
+
+  async getNumberOfPlayersInTeam(teamId: number) {
+    const team = await this.teamService.findOne(teamId);
+
+    const participantsInTeam = await this.participantRepository.find({
+      where: {
+        team,
+      },
+    });
+
+    return participantsInTeam.length;
   }
 }

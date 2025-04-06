@@ -9,11 +9,13 @@ import { CreateGameDto } from './dto/create-game.dto';
 import { UpdateGameDto } from './dto/update-game.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Game } from 'src/entities/game.entity';
-import { LessThan, Repository } from 'typeorm';
+import { In, LessThan, Repository } from 'typeorm';
 import { MICROSERVICES_CLIENTS } from 'src/constants';
 import { ClientRMQ } from '@nestjs/microservices';
-import { DateTime, Duration } from 'luxon';
+import { DateTime } from 'luxon';
 import { Cron, CronExpression } from '@nestjs/schedule';
+import { RemoveGameDto } from './dto/remove-game.dto';
+import { RemoveAllGamesDto } from './dto/remove-all-games.dto';
 
 @Injectable()
 export class GameService {
@@ -21,6 +23,8 @@ export class GameService {
     @InjectRepository(Game) private gameRepository: Repository<Game>,
     @Inject(MICROSERVICES_CLIENTS.AREAS_SERVICE)
     private areaServiceClient: ClientRMQ,
+    @Inject(MICROSERVICES_CLIENTS.NOTIFICATIONS_SERVICE)
+    private notificationServiceClient: ClientRMQ,
   ) {}
 
   async create(createGameDto: CreateGameDto) {
@@ -31,8 +35,6 @@ export class GameService {
     if (createGameDto.user_id !== field.area.owner_id) {
       throw new ForbiddenException();
     }
-
-    DateTime;
 
     const createGameDtoData = {
       description: createGameDto.description,
@@ -59,6 +61,21 @@ export class GameService {
     return `This action returns all game`;
   }
 
+  async findAllGamesWithSameFieldId(fieldIds: number[]) {
+    const games = await this.gameRepository.find({
+      where: {
+        field_id: In(fieldIds),
+      },
+      relations: ['team', 'team.participant'],
+    });
+
+    if (games.length === 0) {
+      throw new NotFoundException();
+    }
+
+    return games;
+  }
+
   async findOne(id: number) {
     const game = await this.gameRepository.findOne({
       where: {
@@ -73,12 +90,60 @@ export class GameService {
     return game;
   }
 
-  update(id: number, updateGameDto: UpdateGameDto) {
-    return `This action updates a #${id} game`;
+  async update(id: number, updateGameDto: UpdateGameDto) {
+    const game = await this.findOne(id);
+
+    const field = await firstValueFrom(
+      this.areaServiceClient.send('findOneFieldInfo', game.field_id),
+    ).catch((error) => {
+      if (error.status === 404) {
+        throw new NotFoundException();
+      }
+    });
+
+    if (field.area.owner_id !== updateGameDto.user_id) {
+      throw new ForbiddenException();
+    }
+
+    return await this.gameRepository.update(id, updateGameDto);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} game`;
+  async remove(removeGameDto: RemoveGameDto) {
+    const game = await this.findOne(removeGameDto.id);
+
+    const field = await firstValueFrom(
+      this.areaServiceClient.send('findOneFieldInfo', game.field_id),
+    ).catch((error) => {
+      if (error.status === 404) {
+        throw new NotFoundException();
+      }
+    });
+
+    if (field.area.owner_id !== removeGameDto.user_id) {
+      throw new ForbiddenException();
+    }
+
+    return await this.gameRepository.remove([game]);
+  }
+
+  async removeAllGames(removeAllGamesDto: RemoveAllGamesDto) {
+    const games = await this.findAllGamesWithSameFieldId(
+      removeAllGamesDto.field_ids,
+    );
+
+    const field = await firstValueFrom(
+      this.areaServiceClient.send('findOneFieldInfo', games.at(0).field_id),
+    ).catch((error) => {
+      if (error.status === 404) {
+        throw new NotFoundException();
+      }
+    });
+
+    if (field.area.owner_id !== removeAllGamesDto.user_id) {
+      throw new ForbiddenException();
+    }
+
+    return await this.gameRepository.remove(games);
   }
 
   @Cron('5 0 * * *')
@@ -105,6 +170,12 @@ export class GameService {
         });
       });
     }
+
+    const sendEmails = await Promise.all(
+      activatedGames.map(async (game) => {
+        await this.sendNotificationAboutGameStatus(game);
+      }),
+    );
   }
 
   async getNotActivatedGames() {
@@ -113,6 +184,7 @@ export class GameService {
         active: false,
         activated_from_date: DateTime.now().toISODate(),
       },
+      relations: ['team', 'team.participant'],
     });
 
     return games;
@@ -124,8 +196,33 @@ export class GameService {
         active: true,
         activated_to_date: LessThan(DateTime.now().toISODate()),
       },
+      relations: ['team', 'team.participant'],
     });
 
     return games;
+  }
+
+  async sendNotificationAboutGameStatus(game: Game) {
+    const participantsIds = game.team
+      .map((team) => team.participant.map((participant) => participant.user_id))
+      .flatMap((team) => team);
+
+    const notficationGameStatusObject = {
+      game_id: game.id,
+      status:
+        participantsIds.length >= game.min_number_of_participants
+          ? true
+          : false,
+      participants_ids: participantsIds,
+    };
+
+    const sendStatus = await firstValueFrom(
+      this.notificationServiceClient.send(
+        'sendGameStatusMail',
+        notficationGameStatusObject,
+      ),
+    );
+
+    return sendStatus;
   }
 }

@@ -5,6 +5,9 @@ import { JwtService } from '@nestjs/jwt';
 import { AuthJwtPayload } from './types/auth-jwtPayload';
 import refreshJwtConfig from './config/refresh-jwt.config';
 import { ConfigType } from '@nestjs/config';
+import { ForgotPasswordDto } from './dto/forgot-password.dto';
+import { MICROSERVICES_CLIENTS } from 'src/constants';
+import { ClientRMQ } from '@nestjs/microservices';
 
 @Injectable()
 export class AuthService {
@@ -13,6 +16,8 @@ export class AuthService {
     private jwtService: JwtService,
     @Inject(refreshJwtConfig.KEY)
     private refreshTokenConfig: ConfigType<typeof refreshJwtConfig>,
+    @Inject(MICROSERVICES_CLIENTS.NOTIFICATION_SERVICE)
+    private notificationServiceClient: ClientRMQ,
   ) {}
 
   async validateUser(email: string, password: string) {
@@ -27,7 +32,6 @@ export class AuthService {
     if (!isPasswordMatch) {
       throw new UnauthorizedException('Invalid credentials');
     }
-    console.log('dipa');
     return { id: user.id };
   }
 
@@ -86,5 +90,11 @@ export class AuthService {
 
   async signOut(userId: number) {
     await this.userService.updateHashRefreshToken(userId, null);
+  }
+
+  async forgotPassword(forgotPasswordDto: ForgotPasswordDto) {
+    const user = this.userService.findOneByEmail(forgotPasswordDto.email);
+
+    //this.notificationServiceClient.send('sendForgotPasswordMail')
   }
 }

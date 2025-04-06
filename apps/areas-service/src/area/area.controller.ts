@@ -8,6 +8,7 @@ import {
 import { AreaService } from './area.service';
 import { CreateAreaDto } from './dto/create-area.dto';
 import { UpdateAreaDto } from './dto/update-area.dto';
+import { RemoveAreaDto } from './dto/remove-area.dto';
 
 @Controller()
 export class AreaController {
@@ -34,7 +35,7 @@ export class AreaController {
   }
 
   @MessagePattern('removeArea')
-  remove(@Payload() id: number) {
-    return this.areaService.remove(id);
+  remove(@Payload() removeAreaDto: RemoveAreaDto) {
+    return this.areaService.remove(removeAreaDto);
   }
 }

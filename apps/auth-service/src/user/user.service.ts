@@ -1,10 +1,15 @@
 import { firstValueFrom } from 'rxjs';
-import { ForbiddenException, Inject, Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/entities/user.entity';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { MICROSERVICES_CLIENTS } from 'src/constants';
 import { ClientRMQ } from '@nestjs/microservices';
 
@@ -67,11 +72,36 @@ export class UserService {
     });
   }
 
+  async findOneByEmail(email: string) {
+    const user = await this.userRepository.findOne({
+      where: {
+        email,
+      },
+    });
+
+    if (!user) {
+      throw new NotFoundException();
+    }
+
+    return user;
+  }
+
   update(id: number, updateUserDto: UpdateUserDto) {
     return `This action updates a #${id} user`;
   }
 
   remove(id: number) {
     return `This action removes a #${id} user`;
+  }
+
+  async getUsersEmails(user_ids: number[]) {
+    const emails = await this.userRepository.find({
+      where: {
+        id: In(user_ids),
+      },
+      select: ['email', 'id'],
+    });
+
+    return emails;
   }
 }

@@ -3,6 +3,7 @@ import { MessagePattern, Payload } from '@nestjs/microservices';
 import { TeamService } from './team.service';
 import { CreateTeamDto } from './dto/create-team.dto';
 import { UpdateTeamDto } from './dto/update-team.dto';
+import { RemoveTeamDto } from './dto/remove-team.dto';
 
 @Controller()
 export class TeamController {
@@ -29,7 +30,7 @@ export class TeamController {
   }
 
   @MessagePattern('removeTeam')
-  remove(@Payload() id: number) {
-    return this.teamService.remove(id);
+  remove(@Payload() removeTeamDto: RemoveTeamDto) {
+    return this.teamService.remove(removeTeamDto);
   }
 }

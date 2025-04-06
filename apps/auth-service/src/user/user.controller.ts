@@ -40,4 +40,9 @@ export class UserController {
   remove(@Payload() id: number) {
     return this.userService.remove(id);
   }
+
+  @MessagePattern('getUsersEmails')
+  getUsersEmails(@Payload() users_ids: number[]) {
+    return this.userService.getUsersEmails(users_ids);
+  }
 }

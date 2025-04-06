@@ -3,6 +3,7 @@ import { MessagePattern, Payload } from '@nestjs/microservices';
 import { ParticipantsService } from './participants.service';
 import { CreateParticipantDto } from './dto/create-participant.dto';
 import { UpdateParticipantDto } from './dto/update-participant.dto';
+import { RemoveParticipantDto } from './dto/remove-participant.dto';
 
 @Controller()
 export class ParticipantsController {
@@ -32,7 +33,7 @@ export class ParticipantsController {
   }
 
   @MessagePattern('removeParticipant')
-  remove(@Payload() id: number) {
-    return this.participantsService.remove(id);
+  remove(@Payload() removeParticipantDto: RemoveParticipantDto) {
+    return this.participantsService.remove(removeParticipantDto);
   }
 }

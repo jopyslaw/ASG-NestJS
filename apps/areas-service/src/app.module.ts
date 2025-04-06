@@ -8,6 +8,9 @@ import { FieldInfoModule } from './field-info/field-info.module';
 import dbConfigDev from './config/db.config.dev';
 import dbConfigProd from './config/db.config.prod';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ClientsModule } from '@nestjs/microservices';
+import rabbitmqGameConfig from './config/rabbitmq-game.config';
+import { MICROSERVICES_CLIENTS } from './constants';
 
 @Module({
   imports: [
@@ -19,6 +22,15 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     TypeOrmModule.forRootAsync({
       useFactory:
         process.env.NODE_ENV === 'production' ? dbConfigProd : dbConfigDev,
+    }),
+    ClientsModule.registerAsync({
+      clients: [
+        {
+          useFactory: rabbitmqGameConfig,
+          name: MICROSERVICES_CLIENTS.GAMES_SERVICE,
+        },
+      ],
+      isGlobal: true,
     }),
     AreaModule,
     AreaInfoModule,

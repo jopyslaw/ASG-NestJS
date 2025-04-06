@@ -2,6 +2,7 @@ import {
   Column,
   Entity,
   ManyToOne,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -21,9 +22,11 @@ export class Team {
   @Column()
   max_number_of_players: number;
 
-  @ManyToOne(() => Game, (game) => game.id, { eager: true })
+  @ManyToOne(() => Game, (game) => game.team, { onDelete: 'CASCADE' })
   game: Game;
 
-  @OneToOne(() => Participant, (participant) => participant.team)
-  participant: Participant;
+  @OneToMany(() => Participant, (participant) => participant.team, {
+    cascade: true,
+  })
+  participant: Participant[];
 }

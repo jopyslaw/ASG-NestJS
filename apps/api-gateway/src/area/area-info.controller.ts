@@ -1,4 +1,12 @@
-import { Body, Controller, Inject, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Inject,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { ClientRMQ } from '@nestjs/microservices';
 import { MICROSERVICES_CLIENTS } from 'src/constants';
 import { JwtAuthGuard } from 'src/guards/jwt-guard/jwt-guard.guard';
@@ -17,6 +25,19 @@ export class AreaInfoController {
     return this.areaInfoServiceClient.send(
       'createAreaInfo',
       areaInfoDataWithUser,
+    );
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete('remove-area-info')
+  removeArea(@Body() removeAreaInfoData, @Req() req) {
+    const removeAreaInfoDataWithUser = {
+      ...removeAreaInfoData,
+      user_id: req.user.sub,
+    };
+    return this.areaInfoServiceClient.send(
+      'removeAreaInfo',
+      removeAreaInfoDataWithUser,
     );
   }
 }

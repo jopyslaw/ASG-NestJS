@@ -2,6 +2,7 @@ import {
   Column,
   Entity,
   JoinColumn,
+  ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -15,7 +16,6 @@ export class Participant {
   @Column()
   user_id: number;
 
-  @OneToOne(() => Team, (team) => team.id)
-  @JoinColumn()
+  @ManyToOne(() => Team, (team) => team.participant, { onDelete: 'CASCADE' })
   team: Team;
 }

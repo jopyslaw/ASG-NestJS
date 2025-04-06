@@ -1,44 +1,71 @@
-import { Injectable } from '@nestjs/common';
-import { CreateNotificationDto } from './dto/create-notification.dto';
-import { UpdateNotificationDto } from './dto/update-notification.dto';
+import { Inject, Injectable } from '@nestjs/common';
 import { ISendMailOptions, MailerService } from '@nestjs-modules/mailer';
 import { NewUserMailDto } from './dto/new-user-mail.dto';
+import { GameStatusMailDto } from './dto/game-status-mail.dto';
+import { MICROSERVICES_CLIENTS } from 'src/constants';
+import { ClientRMQ } from '@nestjs/microservices';
+import { firstValueFrom } from 'rxjs';
+import { ForgotPassworMailDto } from './dto/forgot-password-mail.dto';
 
 @Injectable()
 export class NotificationService {
-  constructor(private mailerService: MailerService) {}
+  constructor(
+    private mailerService: MailerService,
+    @Inject(MICROSERVICES_CLIENTS.AUTH_SERVICE)
+    private authClientService: ClientRMQ,
+  ) {}
 
   async sendNewUserMail(newUserMailDto: NewUserMailDto) {
-    console.log(__dirname);
     const mailConfiguration: ISendMailOptions = {
       to: newUserMailDto.email,
-      subject: 'Welcome tou our service',
+      subject: 'Welcome to our service',
       template: 'new_user',
       context: { username: newUserMailDto.username },
     };
 
     const result = await this.mailerService.sendMail(mailConfiguration);
-    console.log(result);
     return result;
   }
 
-  create(createNotificationDto: CreateNotificationDto) {
-    return 'This action adds a new notification';
+  async sendGameStatusMail(gameStatusMailDto: GameStatusMailDto) {
+    const usersEmails = await firstValueFrom(
+      this.authClientService.send(
+        'getUsersEmails',
+        gameStatusMailDto.participants_ids,
+      ),
+    );
+
+    if (usersEmails.length === 0) {
+      return;
+    }
+
+    const configuredMail = usersEmails.map((user) => {
+      const mailConfiguration: ISendMailOptions = {
+        to: user.email,
+        subject: 'Game will be accepted',
+        template: gameStatusMailDto.status
+          ? 'game_accepted'
+          : 'game_unaccepted',
+      };
+
+      return this.mailerService.sendMail(mailConfiguration);
+    });
+
+    return await Promise.all(configuredMail);
   }
 
-  findAll() {
-    return `This action returns all notification`;
-  }
+  async sendForgotPasswordMail(forgotPasswordMailDto: ForgotPassworMailDto) {
+    const passwordResetLink =
+      'http://localhost:3000/reset-password?token=' +
+      forgotPasswordMailDto.token;
 
-  findOne(id: number) {
-    return `This action returns a #${id} notification`;
-  }
+    const mailConfiguration: ISendMailOptions = {
+      to: forgotPasswordMailDto.email,
+      subject: 'Password reset link',
+      template: 'password_reset',
+      context: { password_reset_link: passwordResetLink },
+    };
 
-  update(id: number, updateNotificationDto: UpdateNotificationDto) {
-    return `This action updates a #${id} notification`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} notification`;
+    return await this.mailerService.sendMail(mailConfiguration);
   }
 }

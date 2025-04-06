@@ -3,6 +3,7 @@ import {
   ForbiddenException,
   Inject,
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { CreateTeamDto } from './dto/create-team.dto';
@@ -14,6 +15,7 @@ import { GameService } from 'src/game/game.service';
 import { firstValueFrom } from 'rxjs';
 import { MICROSERVICES_CLIENTS } from 'src/constants';
 import { ClientRMQ } from '@nestjs/microservices';
+import { RemoveTeamDto } from './dto/remove-team.dto';
 
 @Injectable()
 export class TeamService {
@@ -33,6 +35,7 @@ export class TeamService {
       if (error.status === 404) {
         throw new NotFoundException();
       }
+      throw new InternalServerErrorException();
     });
 
     if (field.area.owner_id !== createTeamDto.user_id) {
@@ -79,6 +82,7 @@ export class TeamService {
       where: {
         id,
       },
+      relations: ['game'],
     });
 
     if (!team) {
@@ -88,11 +92,39 @@ export class TeamService {
     return team;
   }
 
-  update(id: number, updateTeamDto: UpdateTeamDto) {
-    return `This action updates a #${id} team`;
+  async update(id: number, updateTeamDto: UpdateTeamDto) {
+    const team = await this.findOne(id);
+
+    const field = await firstValueFrom(
+      this.areaServiceClient.send('findOneFieldInfo', team.game.field_id),
+    ).catch((error) => {
+      if (error.status === 404) {
+        throw new NotFoundException();
+      }
+    });
+
+    if (field.area.owner_id !== updateTeamDto.user_id) {
+      throw new ForbiddenException();
+    }
+
+    return await this.teamRepository.update(id, updateTeamDto);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} team`;
+  async remove(removeTeamDto: RemoveTeamDto) {
+    const team = await this.findOne(removeTeamDto.id);
+
+    const field = await firstValueFrom(
+      this.areaServiceClient.send('findOneFieldInfo', team.game.field_id),
+    ).catch((error) => {
+      if (error.status === 404) {
+        throw new NotFoundException();
+      }
+    });
+
+    if (field.area.owner_id !== removeTeamDto.user_id) {
+      throw new ForbiddenException();
+    }
+
+    return await this.teamRepository.remove([team]);
   }
 }
