@@ -16,6 +16,7 @@ import { RemoveFieldInfoDto } from './dto/remove-field-info.dto';
 import { MICROSERVICES_CLIENTS } from 'src/constants';
 import { ClientRMQ } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
+import { DateTime } from 'luxon';
 
 @Injectable()
 export class FieldInfoService {
@@ -91,7 +92,16 @@ export class FieldInfoService {
       throw new ForbiddenException();
     }
 
-    return await this.fieldInfoRepository.update(id, updateFieldInfoDto);
+    const { user_id, ...updateFieldInfoDtoWithoutUser } = updateFieldInfoDto;
+
+    return await this.fieldInfoRepository.update(
+      { id },
+      {
+        ...updateFieldInfoDtoWithoutUser,
+        updated_by: user_id,
+        updated_at: DateTime.now().toISODate(),
+      },
+    );
   }
 
   async remove(removeFieldInfoDto: RemoveFieldInfoDto) {

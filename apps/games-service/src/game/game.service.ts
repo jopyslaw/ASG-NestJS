@@ -38,7 +38,7 @@ export class GameService {
 
     const createGameDtoData = {
       description: createGameDto.description,
-      created_by: createGameDto.field_id,
+      created_by: createGameDto.user_id,
       active: createGameDto.active ? true : false,
       activated_from_date: DateTime.fromISO(
         createGameDto.activated_from_date,
@@ -105,7 +105,16 @@ export class GameService {
       throw new ForbiddenException();
     }
 
-    return await this.gameRepository.update(id, updateGameDto);
+    const { user_id, ...updateGameDtoWithoutUser } = updateGameDto;
+
+    return await this.gameRepository.update(
+      { id },
+      {
+        ...updateGameDtoWithoutUser,
+        updated_at: DateTime.now().toISODate(),
+        updated_by: user_id,
+      },
+    );
   }
 
   async remove(removeGameDto: RemoveGameDto) {

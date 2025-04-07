@@ -12,6 +12,8 @@ import refreshJwtConfig from './config/refresh-jwt.config';
 import { RefreshJwtStrategy } from './strategies/refresh.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
 import { UserModule } from 'src/user/user.module';
+import { ResetPasswordJwtStrategy } from './strategies/resetPassword.strategy';
+import jwtResetPasswordConfig from './config/jwt-reset-password.config';
 
 @Module({
   imports: [
@@ -19,6 +21,7 @@ import { UserModule } from 'src/user/user.module';
     JwtModule.registerAsync(jwtConfig.asProvider()),
     ConfigModule.forFeature(jwtConfig),
     ConfigModule.forFeature(refreshJwtConfig),
+    ConfigModule.forFeature(jwtResetPasswordConfig),
     UserModule,
   ],
   controllers: [AuthController],
@@ -28,6 +31,7 @@ import { UserModule } from 'src/user/user.module';
     LocalStrategy,
     JwtStrategy,
     RefreshJwtStrategy,
+    ResetPasswordJwtStrategy,
   ],
 })
 export class AuthModule {}

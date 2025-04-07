@@ -10,4 +10,8 @@ export class UpdateParticipantDto extends PartialType(CreateParticipantDto) {
   @IsNotEmpty()
   @IsNumber()
   team_id: number;
+
+  @IsNotEmpty()
+  @IsNumber()
+  user_id: number;
 }

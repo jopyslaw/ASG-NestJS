@@ -1,5 +1,6 @@
 import {
   BeforeInsert,
+  BeforeUpdate,
   Column,
   CreateDateColumn,
   Entity,
@@ -22,6 +23,11 @@ export class User {
     default: null,
   })
   hashedRefreshToken: string;
+
+  @Column({
+    default: null,
+  })
+  hashedResetPasswordToken: string;
 
   @Column({
     unique: true,

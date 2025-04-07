@@ -31,6 +31,7 @@ export class AreaController {
 
   @MessagePattern('updateArea')
   update(@Payload() updateAreaDto: UpdateAreaDto) {
+    console.log(updateAreaDto);
     return this.areaService.update(updateAreaDto.id, updateAreaDto);
   }
 

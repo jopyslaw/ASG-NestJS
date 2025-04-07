@@ -11,6 +11,7 @@ import { AreaInfo } from 'src/entities/area-info.entity';
 import { Repository } from 'typeorm';
 import { AreaService } from 'src/area/area.service';
 import { RemoveAreaInfoDto } from './dto/remove-area-info.dto';
+import { DateTime } from 'luxon';
 
 @Injectable()
 export class AreaInfoService {
@@ -56,11 +57,22 @@ export class AreaInfoService {
   async update(id: number, updateAreaInfoDto: UpdateAreaInfoDto) {
     const areaInfo = await this.findOne(id);
 
-    if (areaInfo.area.owner_id !== updateAreaInfoDto.user_id) {
+    const { user_id, ...updateAreaInfoDtoWithoutUser } = updateAreaInfoDto;
+
+    if (areaInfo.area.owner_id !== user_id) {
       throw new ForbiddenException();
     }
 
-    return await this.areaInfoRepository.update(id, updateAreaInfoDto);
+    return await this.areaInfoRepository.update(
+      {
+        id,
+      },
+      {
+        ...updateAreaInfoDtoWithoutUser,
+        updated_by: user_id,
+        last_updated_at: DateTime.now().toISODate(),
+      },
+    );
   }
 
   async remove(removeAreaInfoDto: RemoveAreaInfoDto) {

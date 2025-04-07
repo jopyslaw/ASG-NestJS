@@ -22,6 +22,18 @@ export class Game {
   created_by: number;
 
   @Column({
+    default: null,
+    nullable: true,
+  })
+  updated_at: Date;
+
+  @Column({
+    default: null,
+    nullable: true,
+  })
+  updated_by: number;
+
+  @Column({
     type: 'date',
   })
   activated_from_date: string;

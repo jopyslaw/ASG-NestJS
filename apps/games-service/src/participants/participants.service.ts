@@ -14,7 +14,6 @@ import { MICROSERVICES_CLIENTS } from 'src/constants';
 import { ClientRMQ } from '@nestjs/microservices';
 import { TeamService } from 'src/team/team.service';
 import { firstValueFrom } from 'rxjs';
-import { GameService } from 'src/game/game.service';
 import { RemoveParticipantDto } from './dto/remove-participant.dto';
 
 @Injectable()
@@ -38,8 +37,6 @@ export class ParticipantsService {
 
     const team = await this.teamService.findOne(createParticipantDto.team_id);
 
-    console.log(team);
-
     if (!team.game.active) {
       throw new BadRequestException();
     }
@@ -47,8 +44,6 @@ export class ParticipantsService {
     const acctualParticipantsInTeam = (
       await this.teamService.findAllByTeamId(createParticipantDto.team_id)
     ).length;
-
-    console.log(team);
 
     if (acctualParticipantsInTeam >= team.max_number_of_players) {
       throw new BadRequestException();
@@ -73,6 +68,7 @@ export class ParticipantsService {
       where: {
         id,
       },
+      relations: ['team', 'team.game'],
     });
 
     if (!participant) {
@@ -113,7 +109,12 @@ export class ParticipantsService {
       throw new ForbiddenException();
     }
 
-    return await this.participantRepository.update(id, updateParticipantDto);
+    const { user_id, ...updateParticipantDtoWithoutUser } =
+      updateParticipantDto;
+    return await this.participantRepository.update(
+      { id },
+      { ...updateParticipantDtoWithoutUser },
+    );
   }
 
   async remove(removeParticipantDto: RemoveParticipantDto) {

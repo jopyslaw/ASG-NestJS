@@ -1,0 +1,948 @@
+type: collection.insomnia.rest/5.0
+name: ASG
+meta:
+  id: wrk_8fd07a5ed47848c3bab649ee9dfbb8ed
+  created: 1741260737339
+  modified: 1741260737339
+collection:
+  - name: auth-service
+    meta:
+      id: fld_7cf21c0df6e5417fb8a1c18470aadc23
+      created: 1741260756545
+      modified: 1741260756545
+      sortKey: -1741260756545
+    children:
+      - name: Post
+        meta:
+          id: fld_4fdc3ccd16f7494184c0c232d1968d03
+          created: 1744025230011
+          modified: 1744025230011
+          sortKey: -1744025230011
+        children:
+          - url: http://localhost:3000/auth/signup
+            name: Sign-up
+            meta:
+              id: req_97e6e9e78f7d440dad688abeb417fe15
+              created: 1741260761882
+              modified: 1744025238209
+              isPrivate: false
+              sortKey: -1744025232198
+            method: POST
+            body:
+              mimeType: application/json
+              text: |-
+                {
+                	"email": "konradjop00@gmail.com",
+                	"username": "test",
+                	"password": "test"
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+              - name: User-Agent
+                value: insomnia/10.3.1
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: http://localhost:3000/auth/signin
+            name: Sign-in
+            meta:
+              id: req_362bb6d64c914f9da86c7f5cd0f99ccf
+              created: 1741261535378
+              modified: 1744025234762
+              isPrivate: false
+              sortKey: -1744025232098
+            method: POST
+            body:
+              mimeType: application/json
+              text: |-
+                {
+                	"email": "konradjop00@gmail.com",
+                	"password": "test1"
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+              - name: User-Agent
+                value: insomnia/10.3.1
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: http://localhost:3000/auth/forgot-password
+            name: Forgot Password
+            meta:
+              id: req_302ed151283d43daae8ae0800bc7c623
+              created: 1744020961981
+              modified: 1744025233199
+              isPrivate: false
+              sortKey: -1744025231998
+            method: POST
+            body:
+              mimeType: application/json
+              text: |-
+                {
+                	"email": "konradjop00@gmail.com"
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+              - name: User-Agent
+                value: insomnia/11.0.2
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: http://localhost:3000/auth/reset-password
+            name: Reset password
+            meta:
+              id: req_7576d4232dea43e48c11744557cf959d
+              created: 1744021055621
+              modified: 1744025231977
+              isPrivate: false
+              sortKey: -1744025231898
+            method: POST
+            body:
+              mimeType: application/json
+              text: >-
+                {
+                	"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJrb25yYWRqb3AwMEBnbWFpbC5jb20iLCJpYXQiOjE3NDQwMjM2MzMsImV4cCI6MTc0NDE5NjQzM30.rnsv-uylH_JvrbPaEedCkAbU4gZ0uWZ-XBrWgoyTpG8",
+                	"password": "test1"
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+              - name: User-Agent
+                value: insomnia/11.0.2
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+  - name: area-service
+    meta:
+      id: fld_8d45ae6e00204bceb3802bf6f7839fab
+      created: 1742931372620
+      modified: 1742931372620
+      sortKey: -1742931372620
+    children:
+      - name: Delete
+        meta:
+          id: fld_2d30fa5cdb754251b47364e74d15eda8
+          created: 1744025133346
+          modified: 1744025147355
+          sortKey: -1744025133346
+        children:
+          - url: http://localhost:3000/field-info/remove-field-info
+            name: Delete Field Info
+            meta:
+              id: req_27fa89ba779d4596a11598b0a1077d34
+              created: 1743877639994
+              modified: 1744025712569
+              isPrivate: false
+              sortKey: -1744025140400
+            method: DELETE
+            body:
+              mimeType: application/json
+              text: |-
+                {
+                	"id": 2
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+                id: pair_7146009cadcd4ab39e35192738819fcf
+              - name: User-Agent
+                value: insomnia/11.0.2
+                id: pair_f1430f9adc3042c9844c64882a3c637c
+              - id: pair_56e550c43dde4f708c02f40a17dcf2cc
+                name: Authorization
+                value: Bearer {{ _.JWT_TOKEN }}
+                disabled: false
+            authentication:
+              type: none
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: http://localhost:3000/area/delete-area
+            name: Delete Area
+            meta:
+              id: req_b7e44999e7364fb0b5b2007dc670674e
+              created: 1743881984445
+              modified: 1744025724952
+              isPrivate: false
+              sortKey: -1744025140300
+            method: DELETE
+            body:
+              mimeType: application/json
+              text: |-
+                {
+                	"id": 1
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+                id: pair_d10a6448c5104e3cbb15fa2b20cda302
+              - name: User-Agent
+                value: insomnia/11.0.2
+                id: pair_53d63a3e287a4f8b9c0ac180737ac20f
+              - id: pair_7f5b70ef384b454a9383b3f13786306f
+                name: Authorization
+                value: Bearer {{ _.JWT_TOKEN }}
+                disabled: false
+            authentication:
+              type: none
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: http://localhost:3000/area-info/remove-area-info
+            name: Delete Area info
+            meta:
+              id: req_9a7b90449c3b4f788b79a36f885e89be
+              created: 1743951060725
+              modified: 1744025734929
+              isPrivate: false
+              sortKey: -1744025140200
+            method: DELETE
+            body:
+              mimeType: application/json
+              text: |-
+                {
+                	"id": 2
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+                id: pair_1415b822dc8c4ef0a6df726bfd467d61
+              - name: User-Agent
+                value: insomnia/11.0.2
+                id: pair_04c7b279ee4f45739b9730a7532011f5
+              - id: pair_ebff28269078443eae69e0776198f6a8
+                name: Authorization
+                value: Bearer {{ _.JWT_TOKEN }}
+                disabled: false
+            authentication:
+              type: none
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+      - name: Put
+        meta:
+          id: fld_ebe61448e39c49348fd298acf3ddc965
+          created: 1744025166356
+          modified: 1744025166356
+          sortKey: -1744025166356
+        children:
+          - url: http://localhost:3000/field-info/update-field-info
+            name: Update Field Info
+            meta:
+              id: req_14ae43ad629848ce86352cadfc233fd7
+              created: 1743877609397
+              modified: 1744030807882
+              isPrivate: false
+              sortKey: -1744025175433
+            method: PUT
+            body:
+              mimeType: application/json
+              text: |-
+                {
+                	"id": 3,
+                	"description": "Po update opis"
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+              - name: User-Agent
+                value: insomnia/11.0.2
+                id: pair_a176e14f98084b269d9b0c8b3538b58c
+              - id: pair_933d140460c449648f5dc0634089c298
+                name: Authorization
+                value: Bearer {{ _.JWT_TOKEN }}
+                disabled: false
+            authentication:
+              type: none
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: http://localhost:3000/area-info/update-area-info
+            name: Update Area Info
+            meta:
+              id: req_5ec9eea0b2634d3bad4d6512f8dfa9cd
+              created: 1744025863902
+              modified: 1744026779748
+              isPrivate: false
+              sortKey: -1744025863902
+            method: PUT
+            body:
+              mimeType: application/json
+              text: |-
+                {
+                	"id": 3,
+                	"description": "Nowy update description 2",
+                	"areaId": 3
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+                id: pair_ccda603c61c74c72a506ce35e1d67a8b
+              - name: User-Agent
+                value: insomnia/11.0.2
+                id: pair_c63d6be70b2b4b97b9fadc091e0ae838
+              - id: pair_73790490644a46208a7f4c5f8c8983b6
+                name: Authorization
+                value: Bearer {{ _.JWT_TOKEN }}
+                disabled: false
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: http://localhost:3000/area/update-area
+            name: Update Area
+            meta:
+              id: req_a088c8b2feed4e3fa3ba253317bb0cfa
+              created: 1744027369365
+              modified: 1744030387243
+              isPrivate: false
+              sortKey: -1744027369365
+            method: PUT
+            body:
+              mimeType: application/json
+              text: |-
+                {
+                	"id": 2,
+                	"name": "Testowa po update",
+                	"number_of_fields": 3,
+                	"coordinates_of_place": "74 N 25 W"
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+              - name: User-Agent
+                value: insomnia/11.0.2
+                id: pair_4f27823a960e40a7a939792abcd4d111
+              - id: pair_01c0b9ddc2614c1b86d43d316a5a5c5d
+                name: Authorization
+                value: Bearer {{ _.JWT_TOKEN }}
+                disabled: false
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+      - name: Post
+        meta:
+          id: fld_2c4f8b85739145459424f656bbee07f0
+          created: 1744025184594
+          modified: 1744025184594
+          sortKey: -1744025184594
+        children:
+          - url: http://localhost:3000/area/create-area
+            name: Create Area
+            meta:
+              id: req_f0ec0f8abba146a2b23811f15b09cf78
+              created: 1742931387082
+              modified: 1744025695149
+              isPrivate: false
+              sortKey: -1744025215233
+            method: POST
+            body:
+              mimeType: application/json
+              text: |-
+                {
+                	"name": "Testowa1",
+                	"number_of_fields": 2,
+                	"coordinates_of_place": "40NE 75W"
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+                id: pair_fbda011c2a2640a89e4968aa0f31de88
+              - name: User-Agent
+                value: insomnia/11.0.0
+                id: pair_ac1058f874e64439ab53dd8ab6540a75
+              - id: pair_d02174fd47044b47b31bde994aff8514
+                name: Authorization
+                value: Bearer {{ _.JWT_TOKEN }}
+                disabled: false
+            authentication:
+              type: none
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: http://localhost:3000/area-info/create-area-info
+            name: Create Area Info
+            meta:
+              id: req_9011938c80cd4fe79c794276fee0a182
+              created: 1743075629692
+              modified: 1744025697209
+              isPrivate: false
+              sortKey: -1744025215333
+            method: POST
+            body:
+              mimeType: application/json
+              text: |-
+                {
+                	"area_id": 2,
+                	"description": "To jest jakiś opis do areny"
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+                id: pair_05d9a3d22a4f4d96bd5678a3a765d655
+              - name: User-Agent
+                value: insomnia/11.0.0
+                id: pair_7830eb1ea52b4cf2a48cc289506608df
+              - id: pair_cd2aecc62f014d3aaafe5bb3bf9c857a
+                name: Authorization
+                value: Bearer {{ _.JWT_TOKEN }}
+                disabled: false
+            authentication:
+              type: none
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: http://localhost:3000/field-info/create-field-info
+            name: Create Field Info
+            meta:
+              id: req_1a194fb0f9d84a92babc8330c3495866
+              created: 1743077592053
+              modified: 1744025525763
+              isPrivate: false
+              sortKey: -1744025215433
+            method: POST
+            body:
+              mimeType: application/json
+              text: |-
+                {
+                	"description": "Przykładowy opis areny",
+                	"max_players_number": 24,
+                	"min_players_number": 10,
+                	"area_id": 2
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+                id: pair_8a0a06b806a640da96a64aafcfb8f9f1
+              - name: User-Agent
+                value: insomnia/11.0.0
+                id: pair_25fee7c4b24a4a4fb0a4279f3113e3a7
+              - id: pair_317f3da66bcb45a2b36b30800fd88470
+                name: Authorization
+                value: Bearer {{ _.JWT_TOKEN }}
+                disabled: false
+            authentication:
+              type: none
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+      - name: Get
+        meta:
+          id: fld_c8cc21e935e94367b6c9da7858ed23fe
+          created: 1744025296973
+          modified: 1744025296973
+          sortKey: -1744025296973
+  - name: users-service
+    meta:
+      id: fld_9d9ab4fdae5a4819b8ed74da66f541be
+      created: 1743084434182
+      modified: 1743084734089
+      sortKey: -1743084434182
+    children:
+      - name: Post
+        meta:
+          id: fld_8597dbab53c442a7a27d3e0599920771
+          created: 1744025250774
+          modified: 1744025250774
+          sortKey: -1744025250774
+        children:
+          - url: http://localhost:3000/user-info/create-user-info
+            name: create-user-info
+            meta:
+              id: req_cf13a871bebb4c59a774beb5d503a79a
+              created: 1743084584530
+              modified: 1744025762153
+              isPrivate: false
+              sortKey: -1744025252981
+            method: POST
+            body:
+              mimeType: application/json
+              text: |-
+                {
+                	"user_id": 1,
+                	"name": "Test",
+                	"surname": "Test"
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+                id: pair_176b60ae40084dad8c862de9d4cc42c7
+              - name: User-Agent
+                value: insomnia/11.0.0
+                id: pair_a8a42abad04842869e76fbba08963a29
+              - id: pair_3402964cad894230a44d3c2928ba017e
+                name: Authorization
+                value: Bearer {{ _.JWT_TOKEN }}
+                disabled: false
+            authentication:
+              type: none
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+      - name: Put
+        meta:
+          id: fld_bdfc77203d434a2eafeb5638360b0f5c
+          created: 1744025266391
+          modified: 1744025266391
+          sortKey: -1744025266391
+      - name: Delete
+        meta:
+          id: fld_5cc885f709c442cf929f1f226fd75632
+          created: 1744025273008
+          modified: 1744025273008
+          sortKey: -1744025273008
+      - name: Get
+        meta:
+          id: fld_fd4cde31614c423e8f41b0af776c9685
+          created: 1744025286889
+          modified: 1744025286889
+          sortKey: -1744025286889
+    authentication:
+      type: bearer
+      token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImlhdCI6MTc0MzA3NTY2MSwiZXhwIjoxNzQzMDc5MjYxfQ.34VovPjNMtWzWm5L-mAhTbFE_iigE0qrdopnY0HQr2U
+  - name: game-service
+    meta:
+      id: fld_5ac9525843304904b9c3fa7c5988d9f1
+      created: 1743172423804
+      modified: 1743172423804
+      sortKey: -1743172423804
+    children:
+      - name: Delete
+        meta:
+          id: fld_591f0b9ce6c647ff98b50c506d7532a9
+          created: 1744025309906
+          modified: 1744025309906
+          sortKey: -1744025309906
+        children:
+          - url: http://localhost:3000/participant/remove-participant
+            name: Delete participant
+            meta:
+              id: req_4649a5484a09441e8e132c013a790f3e
+              created: 1743957108117
+              modified: 1744025825593
+              isPrivate: false
+              sortKey: -1744025323976
+            method: DELETE
+            body:
+              mimeType: application/json
+              text: |-
+                {
+                	"id": 2
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+                id: pair_27108b96b1ea40d7a457b7afc09b8267
+              - name: User-Agent
+                value: insomnia/11.0.2
+                id: pair_c012650edb4c4945811e626b3f709381
+              - id: pair_ccc337a6455644d4ac4ed5de27105996
+                name: Authorization
+                value: Bearer {{ _.JWT_TOKEN }}
+                disabled: false
+            authentication:
+              type: none
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: http://localhost:3000/team/remove-team
+            name: Delete team
+            meta:
+              id: req_d3edae33df324dfabd68e1b59f33e03f
+              created: 1743957703528
+              modified: 1744025835463
+              isPrivate: false
+              sortKey: -1744025323876
+            method: DELETE
+            body:
+              mimeType: application/json
+              text: |-
+                {
+                	"id": 2
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+                id: pair_5b22090297f04cb1a7fe0549a250a651
+              - name: User-Agent
+                value: insomnia/11.0.2
+                id: pair_a026f1d2db0142258dc44ca57847ebc8
+              - id: pair_d1552c218b034e2891343ecf736e9bb5
+                name: Authorization
+                value: Bearer {{ _.JWT_TOKEN }}
+                disabled: false
+            authentication:
+              type: none
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: http://localhost:3000/game/remove-game
+            name: Delete game
+            meta:
+              id: req_da6d4771c557435ba3cf4fb3ef6dae56
+              created: 1743958202396
+              modified: 1744025846095
+              isPrivate: false
+              sortKey: -1744025323776
+            method: DELETE
+            body:
+              mimeType: application/json
+              text: |-
+                {
+                	"id": 2
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+                id: pair_680656a77970442db29359b94a4c892d
+              - name: User-Agent
+                value: insomnia/11.0.2
+                id: pair_b0e32b50fb2d4576a7866ffa81bb35d7
+              - id: pair_50dbdf1a3bb943abad28c02779f1c80d
+                name: Authorization
+                value: Bearer {{ _.JWT_TOKEN }}
+                disabled: false
+            authentication:
+              type: none
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+      - name: Post
+        meta:
+          id: fld_b208a190828d4508b4f919cee52300d5
+          created: 1744025315184
+          modified: 1744025315184
+          sortKey: -1744025315184
+        children:
+          - url: http://localhost:3000/game/create-game
+            name: create game
+            meta:
+              id: req_59ed5bdae71b41b0a4d832b5f9fa65a4
+              created: 1743172426084
+              modified: 1744025791605
+              isPrivate: false
+              sortKey: -1744025336446
+            method: POST
+            body:
+              mimeType: application/json
+              text: |-
+                {
+                  "description": "Testowa rozgrywka",
+                  "active": false,
+                  "field_id": 3,
+                  "number_of_teams": 2,
+                  "activated_from_date": "2025-04-01",
+                  "activated_to_date": "2025-04-04",
+                  "max_number_of_participants": 24,
+                  "min_number_of_participants": 10
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+                id: pair_36eec0858a7f4271bf4f7347a1c0c437
+              - name: User-Agent
+                value: insomnia/11.0.1
+                id: pair_32acbc6846004c9e9259102f1fe5c639
+              - id: pair_ba51e872b90a40088a43a618088dcb8f
+                name: Authorization
+                value: Bearer {{ _.JWT_TOKEN }}
+                disabled: false
+            authentication:
+              type: none
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: http://localhost:3000/team/create-team
+            name: create team
+            meta:
+              id: req_089a0074dbff4a6caeeb07bc06662f1c
+              created: 1743497176963
+              modified: 1744032212331
+              isPrivate: false
+              sortKey: -1744025336346
+            method: POST
+            body:
+              mimeType: application/json
+              text: |-
+                {
+                	"name": "Niebiescy",
+                	"max_numbers_of_players": 13,
+                	"game_id": 3 
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+                id: pair_2ae68f10e4054225b90479a2497ae961
+              - name: User-Agent
+                value: insomnia/11.0.1
+                id: pair_569a2a2f8fcc40359b34a7fa9fbf70cb
+              - id: pair_fb42b06b611e4c83b9de3ea4f489c88e
+                name: Authorization
+                value: Bearer {{ _.JWT_TOKEN }}
+                disabled: false
+            authentication:
+              type: none
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: http://localhost:3000/participant/create-participant
+            name: create participant
+            meta:
+              id: req_d9be13307b754e38bf86c5621a34a12d
+              created: 1743506203166
+              modified: 1744032217813
+              isPrivate: false
+              sortKey: -1744025336246
+            method: POST
+            body:
+              mimeType: application/json
+              text: |-
+                {
+                	"team_id": 4
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+                id: pair_4f53d54eb4d34119ab38e12a0eefdc41
+              - name: User-Agent
+                value: insomnia/11.0.1
+                id: pair_4566d4ec77d44aec8cbea976e61b66d7
+              - id: pair_325de6d451594d8b8415e49bfac50d6d
+                name: Authorization
+                value: Bearer {{ _.JWT_TOKEN }}
+                disabled: false
+            authentication:
+              type: none
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+      - name: Put
+        meta:
+          id: fld_b1b44c86cfa24f2f9c047a1d074d40d9
+          created: 1744025320738
+          modified: 1744025320738
+          sortKey: -1744025320738
+        children:
+          - url: http://localhost:3000/participant/update-participant
+            name: Update Participant
+            meta:
+              id: req_5db684ac1231497f92406aca9ffa77ba
+              created: 1743775178968
+              modified: 1744037140287
+              isPrivate: false
+              sortKey: -1744025330945
+            method: PUT
+            body:
+              mimeType: application/json
+              text: |-
+                {
+                	"id": 5,
+                	"team_id": 4
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+                id: pair_95fc2f2ca2a543f09e56bed8519cc51d
+              - name: User-Agent
+                value: insomnia/11.0.1
+                id: pair_14fbf707a51141bba9a0b37309d15e04
+              - id: pair_8e415f19778942a4a90d85e70eb14793
+                name: Authorization
+                value: Bearer {{ _.JWT_TOKEN }}
+                disabled: false
+            authentication:
+              type: none
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: http://localhost:3000/game/update-game
+            name: Update Game
+            meta:
+              id: req_a237fbb55a054d0fa3b89292ed1701c9
+              created: 1744032032723
+              modified: 1744032314512
+              isPrivate: false
+              sortKey: -1744032032723
+            method: PUT
+            body:
+              mimeType: application/json
+              text: |-
+                {
+                	"id": 3,
+                	"description": "Update gry",
+                	"active": true
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+              - name: User-Agent
+                value: insomnia/11.0.2
+                id: pair_c5afcb74146f40b888cbd0e3425af6e8
+              - id: pair_6af3b5084cff4dc28ac31f71de411623
+                name: Authorization
+                value: Bearer {{ _.JWT_TOKEN }}
+                disabled: false
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: http://localhost:3000/team/update-team
+            name: Update Team
+            meta:
+              id: req_cd1355dea8d545fd8e54a7b16ffebf91
+              created: 1744033074392
+              modified: 1744036712790
+              isPrivate: false
+              sortKey: -1744033074392
+            method: PUT
+            body:
+              mimeType: application/json
+              text: |-
+                {
+                	"id": 4,
+                	"name": "Niebiescy update"
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+              - name: User-Agent
+                value: insomnia/11.0.2
+                id: pair_9bd6751270194ce395265a4f5769a994
+              - id: pair_2a7f7e29aeed4ca6bc55717e88352c90
+                name: Authorization
+                value: Bearer {{ _.JWT_TOKEN }}
+                disabled: false
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_2060ac08e15c91337391a4ed3dd73b168c801bf6
+    created: 1741260737341
+    modified: 1741260737341
+environments:
+  name: Base Environment
+  meta:
+    id: env_2060ac08e15c91337391a4ed3dd73b168c801bf6
+    created: 1741260737340
+    modified: 1744036704569
+    isPrivate: false
+  data:
+    JWT_TOKEN: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImlhdCI6MTc0NDAzNjY5NiwiZXhwIjoxNzQ0MDQwMjk2fQ.OiqZPB3PLOJ_RmKKAaKw3_6EIvCMbZhRDDMIHcpkFzo

@@ -72,7 +72,14 @@ export class UserService {
       throw new ForbiddenException();
     }
 
-    return await this.userRepository.update(id, updateUserDto);
+    const { user_id, ...updateUserDtoWithoutUser } = updateUserDto;
+
+    return await this.userRepository.update(
+      { id },
+      {
+        ...updateUserDtoWithoutUser,
+      },
+    );
   }
 
   async remove(removeUserDto: RemoveUserDto) {

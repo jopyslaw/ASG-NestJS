@@ -35,14 +35,11 @@ export class UserService {
       email: createdUser.email,
     };
 
-    console.log(newUserMailData);
-
     await firstValueFrom(
       this.notificationServiceClient.send('sendNewUserMail', newUserMailData),
     ).catch((error) => {
       console.error('Błąd wysyłki wiadomości:', error);
     });
-    //console.log(res);
     return createdUser;
   }
 
@@ -62,6 +59,28 @@ export class UserService {
     return await this.userRepository.update(
       { id: userId },
       { hashedRefreshToken },
+    );
+  }
+
+  async updateHashForgotPasswordToken(
+    userId: number,
+    hashedResetPasswordToken: string,
+  ) {
+    return await this.userRepository.update(
+      { id: userId },
+      { hashedResetPasswordToken },
+    );
+  }
+
+  async updatePassword(id: number, password: string) {
+    return await this.userRepository.update(
+      {
+        id,
+      },
+      {
+        hashedResetPasswordToken: null,
+        password,
+      },
     );
   }
 

@@ -66,12 +66,14 @@ export class TeamService {
   }
 
   async findAllByTeamId(game_id: number) {
+    console.log('XDASD');
     const teams = await this.teamRepository.find({
       where: {
         game: {
           id: game_id,
         },
       },
+      relations: ['game', 'participant'],
     });
 
     return teams;
@@ -107,7 +109,25 @@ export class TeamService {
       throw new ForbiddenException();
     }
 
-    return await this.teamRepository.update(id, updateTeamDto);
+    const teams = await this.findAllByTeamId(team.game.id);
+
+    if (
+      updateTeamDto.name &&
+      teams.find((team) => team.name === updateTeamDto.name)
+    ) {
+      throw new BadRequestException(
+        `Team with name: ${updateTeamDto.name} already exist for game`,
+      );
+    }
+
+    const { user_id, ...updateTeamDtoWithoutUser } = updateTeamDto;
+
+    return await this.teamRepository.update(
+      { id },
+      {
+        ...updateTeamDtoWithoutUser,
+      },
+    );
   }
 
   async remove(removeTeamDto: RemoveTeamDto) {

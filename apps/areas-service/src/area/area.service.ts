@@ -13,6 +13,7 @@ import { Repository } from 'typeorm';
 import { MICROSERVICES_CLIENTS } from 'src/constants';
 import { ClientRMQ } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
+import { DateTime } from 'luxon';
 
 @Injectable()
 export class AreaService {
@@ -68,13 +69,27 @@ export class AreaService {
   }
 
   async update(id: number, updateAreaDto: UpdateAreaDto) {
+    console.log(updateAreaDto);
     if (!this.checkIfAreaOwner(updateAreaDto.user_id, id)) {
       throw new ForbiddenException();
     }
 
     const area = await this.findOne(id);
 
-    return await this.areaRepository.update(id, updateAreaDto);
+    const { user_id, ...updateAreaDtoWithoutUser } = updateAreaDto;
+
+    console.log(user_id);
+
+    return await this.areaRepository.update(
+      {
+        id,
+      },
+      {
+        ...updateAreaDtoWithoutUser,
+        last_update_date: DateTime.now().toISODate(),
+        updated_by: user_id,
+      },
+    );
   }
 
   async remove(removeAreaDto: RemoveAreaDto) {
@@ -105,12 +120,16 @@ export class AreaService {
   }
 
   async checkIfAreaOwner(userId: number, areaId: number) {
+    console.log(userId, areaId);
+
     const area = await this.areaRepository.findOne({
       where: {
         id: areaId,
         owner_id: userId,
       },
     });
+
+    console.log(area);
 
     if (!area) {
       throw new NotFoundException();
