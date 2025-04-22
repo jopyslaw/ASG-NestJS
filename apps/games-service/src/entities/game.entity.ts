@@ -2,8 +2,10 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Team } from './team.entity';
 
 @Entity()
 export class Game {
@@ -19,11 +21,27 @@ export class Game {
   @Column()
   created_by: number;
 
-  @Column()
-  activated_from_date: Date;
+  @Column({
+    default: null,
+    nullable: true,
+  })
+  updated_at: Date;
 
-  @Column()
-  activated_to_date: Date;
+  @Column({
+    default: null,
+    nullable: true,
+  })
+  updated_by: number;
+
+  @Column({
+    type: 'date',
+  })
+  activated_from_date: string;
+
+  @Column({
+    type: 'date',
+  })
+  activated_to_date: string;
 
   @Column()
   max_number_of_participants: number;
@@ -41,4 +59,7 @@ export class Game {
     default: false,
   })
   active: boolean;
+
+  @OneToMany(() => Team, (team) => team.game, { cascade: true })
+  team: Team[];
 }

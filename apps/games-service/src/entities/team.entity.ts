@@ -1,5 +1,13 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Game } from './game.entity';
+import { Participant } from './participant.entity';
 
 @Entity()
 export class Team {
@@ -14,9 +22,11 @@ export class Team {
   @Column()
   max_number_of_players: number;
 
-  @Column()
-  acctual_number_of_player: number;
+  @ManyToOne(() => Game, (game) => game.team, { onDelete: 'CASCADE' })
+  game: Game;
 
-  @ManyToOne(() => Game, (game) => game.id, { eager: true })
-  event: Game;
+  @OneToMany(() => Participant, (participant) => participant.team, {
+    cascade: true,
+  })
+  participant: Participant[];
 }

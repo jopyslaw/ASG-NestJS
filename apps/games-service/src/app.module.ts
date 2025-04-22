@@ -11,6 +11,8 @@ import dbConfigProd from './config/db.config.prod';
 import { ClientsModule } from '@nestjs/microservices';
 import rabbitmqAreaConfig from './config/rabbitmq-area.config';
 import { MICROSERVICES_CLIENTS } from './constants';
+import { ScheduleModule } from '@nestjs/schedule';
+import rabbitmqNotificationConfig from './config/rabbitmq-notification.config';
 
 @Module({
   imports: [
@@ -29,9 +31,14 @@ import { MICROSERVICES_CLIENTS } from './constants';
           useFactory: rabbitmqAreaConfig,
           name: MICROSERVICES_CLIENTS.AREAS_SERVICE,
         },
+        {
+          useFactory: rabbitmqNotificationConfig,
+          name: MICROSERVICES_CLIENTS.NOTIFICATIONS_SERVICE,
+        },
       ],
       isGlobal: true,
     }),
+    ScheduleModule.forRoot(),
     GameModule,
     TeamModule,
     ParticipantsModule,

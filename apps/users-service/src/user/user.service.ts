@@ -1,4 +1,10 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { RemoveUserDto } from './dto/remove-user.dto';
+import {
+  ForbiddenException,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -30,7 +36,7 @@ export class UserService {
   }
 
   async checkIfUserWithProviedIdExist(userId: number) {
-    let user = await firstValueFrom(
+    const user = await firstValueFrom(
       this.areaAuthServiceClient.send('findOneUser', userId),
     );
 
@@ -45,15 +51,44 @@ export class UserService {
     return `This action returns all user`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: number) {
+    const userInfo = await this.userRepository.findOne({
+      where: {
+        id,
+      },
+    });
+
+    if (!userInfo) {
+      throw new NotFoundException();
+    }
+
+    return userInfo;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    const userInfo = await this.findOne(id);
+
+    if (userInfo.user_id !== updateUserDto.user_id) {
+      throw new ForbiddenException();
+    }
+
+    const { user_id, ...updateUserDtoWithoutUser } = updateUserDto;
+
+    return await this.userRepository.update(
+      { id },
+      {
+        ...updateUserDtoWithoutUser,
+      },
+    );
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(removeUserDto: RemoveUserDto) {
+    const userInfo = await this.findOne(removeUserDto.id);
+
+    if (userInfo.user_id !== removeUserDto.user_id) {
+      throw new ForbiddenException();
+    }
+
+    return await this.userRepository.remove([userInfo]);
   }
 }

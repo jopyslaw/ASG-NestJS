@@ -29,7 +29,7 @@ export class AreaInfo {
   })
   updated_by: number;
 
-  @OneToOne(() => Area, (area) => area.area_info, { eager: true })
+  @OneToOne(() => Area, (area) => area.area_info, { onDelete: 'CASCADE' })
   @JoinColumn()
   area: Area;
 }

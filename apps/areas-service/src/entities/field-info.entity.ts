@@ -42,7 +42,6 @@ export class FieldInfo {
   })
   updated_at: Date;
 
-  @ManyToOne(() => Area, (area) => area.id, { eager: true })
-  @JoinColumn()
+  @ManyToOne(() => Area, (area) => area.field_info, { onDelete: 'CASCADE' })
   area: Area;
 }

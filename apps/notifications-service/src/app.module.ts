@@ -6,6 +6,9 @@ import { NotificationModule } from './notification/notification.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { join } from 'path';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
+import { Client, ClientsModule } from '@nestjs/microservices';
+import rabbitmqAuthConfig from './config/rabbitmq-auth.config';
+import { MICROSERVICES_CLIENTS } from './constants';
 
 @Module({
   imports: [
@@ -34,6 +37,15 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
           strict: true,
         },
       },
+    }),
+    ClientsModule.registerAsync({
+      clients: [
+        {
+          useFactory: rabbitmqAuthConfig,
+          name: MICROSERVICES_CLIENTS.AUTH_SERVICE,
+        },
+      ],
+      isGlobal: true,
     }),
   ],
   controllers: [AppController],

@@ -3,6 +3,8 @@ import { MessagePattern, Payload } from '@nestjs/microservices';
 import { GameService } from './game.service';
 import { CreateGameDto } from './dto/create-game.dto';
 import { UpdateGameDto } from './dto/update-game.dto';
+import { RemoveGameDto } from './dto/remove-game.dto';
+import { RemoveAllGamesDto } from './dto/remove-all-games.dto';
 
 @Controller()
 export class GameController {
@@ -18,6 +20,16 @@ export class GameController {
     return this.gameService.findAll();
   }
 
+  @MessagePattern('findAllActiveGames')
+  findAllActiveGames() {
+    return this.gameService.findAllActiveGames();
+  }
+
+  @MessagePattern('findAllActiveGamesForFieldId')
+  findAllActiveGamesForFieldId(fieldId: number) {
+    return this.gameService.findAllActiveGamesForFieldId(fieldId);
+  }
+
   @MessagePattern('findOneGame')
   findOne(@Payload() id: number) {
     return this.gameService.findOne(id);
@@ -29,7 +41,12 @@ export class GameController {
   }
 
   @MessagePattern('removeGame')
-  remove(@Payload() id: number) {
-    return this.gameService.remove(id);
+  remove(@Payload() removeGameDto: RemoveGameDto) {
+    return this.gameService.remove(removeGameDto);
+  }
+
+  @MessagePattern('removeAllGames')
+  removeAllGames(@Payload() removeAllGamesDto: RemoveAllGamesDto) {
+    return this.gameService.removeAllGames(removeAllGamesDto);
   }
 }

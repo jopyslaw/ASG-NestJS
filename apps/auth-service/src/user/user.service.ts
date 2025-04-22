@@ -1,10 +1,15 @@
 import { firstValueFrom } from 'rxjs';
-import { ForbiddenException, Inject, Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/entities/user.entity';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { MICROSERVICES_CLIENTS } from 'src/constants';
 import { ClientRMQ } from '@nestjs/microservices';
 
@@ -30,14 +35,11 @@ export class UserService {
       email: createdUser.email,
     };
 
-    console.log(newUserMailData);
-
     await firstValueFrom(
       this.notificationServiceClient.send('sendNewUserMail', newUserMailData),
     ).catch((error) => {
       console.error('Błąd wysyłki wiadomości:', error);
     });
-    //console.log(res);
     return createdUser;
   }
 
@@ -60,11 +62,47 @@ export class UserService {
     );
   }
 
+  async updateHashForgotPasswordToken(
+    userId: number,
+    hashedResetPasswordToken: string,
+  ) {
+    return await this.userRepository.update(
+      { id: userId },
+      { hashedResetPasswordToken },
+    );
+  }
+
+  async updatePassword(id: number, password: string) {
+    return await this.userRepository.update(
+      {
+        id,
+      },
+      {
+        hashedResetPasswordToken: null,
+        password,
+      },
+    );
+  }
+
   async findOne(id: number) {
     return this.userRepository.findOne({
       where: { id },
       select: ['hashedRefreshToken'],
     });
+  }
+
+  async findOneByEmail(email: string) {
+    const user = await this.userRepository.findOne({
+      where: {
+        email,
+      },
+    });
+
+    if (!user) {
+      throw new NotFoundException();
+    }
+
+    return user;
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {
@@ -73,5 +111,16 @@ export class UserService {
 
   remove(id: number) {
     return `This action removes a #${id} user`;
+  }
+
+  async getUsersEmails(user_ids: number[]) {
+    const emails = await this.userRepository.find({
+      where: {
+        id: In(user_ids),
+      },
+      select: ['email', 'id'],
+    });
+
+    return emails;
   }
 }

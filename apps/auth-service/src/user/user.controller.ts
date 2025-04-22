@@ -15,7 +15,7 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @HttpCode(HttpStatus.CREATED)
-  @UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
+  //@UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
   @MessagePattern('createUser')
   create(@Payload() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
@@ -39,5 +39,10 @@ export class UserController {
   @MessagePattern('removeUser')
   remove(@Payload() id: number) {
     return this.userService.remove(id);
+  }
+
+  @MessagePattern('getUsersEmails')
+  getUsersEmails(@Payload() users_ids: number[]) {
+    return this.userService.getUsersEmails(users_ids);
   }
 }

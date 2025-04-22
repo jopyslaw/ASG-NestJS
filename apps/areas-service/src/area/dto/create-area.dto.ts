@@ -27,9 +27,5 @@ export class CreateAreaDto {
 
   @IsNotEmpty()
   @IsNumber()
-  user_id?: number;
-
-  @IsNotEmpty()
-  @IsNumber()
-  owner_id?: number;
+  user_id: number;
 }

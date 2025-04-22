@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -48,6 +49,8 @@ export class Area {
   })
   area_info: AreaInfo;
 
-  @OneToMany(() => FieldInfo, (field_info) => field_info.area)
+  @OneToMany(() => FieldInfo, (field_info) => field_info.area, {
+    cascade: true,
+  })
   field_info: FieldInfo[];
 }

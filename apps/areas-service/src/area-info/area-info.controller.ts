@@ -3,6 +3,7 @@ import { MessagePattern, Payload } from '@nestjs/microservices';
 import { AreaInfoService } from './area-info.service';
 import { CreateAreaInfoDto } from './dto/create-area-info.dto';
 import { UpdateAreaInfoDto } from './dto/update-area-info.dto';
+import { RemoveAreaInfoDto } from './dto/remove-area-info.dto';
 
 @Controller()
 export class AreaInfoController {
@@ -18,6 +19,11 @@ export class AreaInfoController {
     return this.areaInfoService.findAll();
   }
 
+  @MessagePattern('findAreaInfoForAreaId')
+  findAreaInfoForAreaId(areaId: number) {
+    return this.areaInfoService.findAreaInfoForAreaId(areaId);
+  }
+
   @MessagePattern('findOneAreaInfo')
   findOne(@Payload() id: number) {
     return this.areaInfoService.findOne(id);
@@ -29,7 +35,7 @@ export class AreaInfoController {
   }
 
   @MessagePattern('removeAreaInfo')
-  remove(@Payload() id: number) {
-    return this.areaInfoService.remove(id);
+  remove(@Payload() removeAreaInfoDto: RemoveAreaInfoDto) {
+    return this.areaInfoService.remove(removeAreaInfoDto);
   }
 }
