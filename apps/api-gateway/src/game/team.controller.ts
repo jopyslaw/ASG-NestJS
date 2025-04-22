@@ -2,9 +2,11 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   Inject,
   Post,
   Put,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -47,5 +49,17 @@ export class TeamController {
       user_id: req.user.sub,
     };
     return this.gameServiceClient.send('updateTeam', updateTeamDataWithUserId);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('find-all-team')
+  findAll() {
+    return this.gameServiceClient.send('findAllTeam', {});
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('find-all-team-by-game-id')
+  findAllByGameId(@Query('gameId') gameId: number) {
+    return this.gameServiceClient.send('findAllByGameId', gameId);
   }
 }

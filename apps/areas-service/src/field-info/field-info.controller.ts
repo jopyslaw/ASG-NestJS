@@ -19,6 +19,11 @@ export class FieldInfoController {
     return this.fieldInfoService.findAll();
   }
 
+  @MessagePattern('findAllFieldsForAreaId')
+  findAllFieldsForAreaId(areaId: number) {
+    return this.fieldInfoService.findAllFieldsForAreaId(areaId);
+  }
+
   @MessagePattern('findOneFieldInfo')
   findOne(@Payload() id: number) {
     return this.fieldInfoService.findOne(id);

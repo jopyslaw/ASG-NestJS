@@ -23,23 +23,31 @@ export class AuthController {
 
   @Post('signup')
   async signUp(@Body() data: CreateUserDto) {
-    return await firstValueFrom(
-      this.authServiceClient.send('createUser', data),
-    );
+    return this.authServiceClient.send('createUser', data);
+  }
+
+  @Post('sign-out')
+  signOut() {
+    return this.authServiceClient.send('sigOut', {});
+  }
+
+  @Post('refresh-token')
+  refreshToken() {
+    return this.authServiceClient.send('refreshToken', {});
   }
 
   @Post('signin')
-  signIn(@Body() data: LoginUserDto) {
-    return this.authServiceClient.send('signIn', data);
+  signIn(@Body() loginUserDto: LoginUserDto) {
+    return this.authServiceClient.send('signIn', loginUserDto);
   }
 
   @Post('forgot-password')
-  forgotPassword(@Body() data: ForgotPasswordDto) {
-    return this.authServiceClient.send('forgotPassword', data);
+  forgotPassword(@Body() forgotPasswordDto: ForgotPasswordDto) {
+    return this.authServiceClient.send('forgotPassword', forgotPasswordDto);
   }
 
   @Post('reset-password')
-  resetPassword(@Body() data: ResetPasswordDto) {
-    return this.authServiceClient.send('resetPassword', data);
+  resetPassword(@Body() resetPasswordDto: ResetPasswordDto) {
+    return this.authServiceClient.send('resetPassword', resetPasswordDto);
   }
 }

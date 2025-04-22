@@ -19,6 +19,11 @@ export class AreaInfoController {
     return this.areaInfoService.findAll();
   }
 
+  @MessagePattern('findAreaInfoForAreaId')
+  findAreaInfoForAreaId(areaId: number) {
+    return this.areaInfoService.findAreaInfoForAreaId(areaId);
+  }
+
   @MessagePattern('findOneAreaInfo')
   findOne(@Payload() id: number) {
     return this.areaInfoService.findOne(id);

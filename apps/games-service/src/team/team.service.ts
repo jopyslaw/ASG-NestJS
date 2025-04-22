@@ -43,7 +43,7 @@ export class TeamService {
     }
 
     const acctualNumberOfTeams = (
-      await this.findAllByTeamId(createTeamDto.game_id)
+      await this.findAllByGameId(createTeamDto.game_id)
     ).length;
 
     if (acctualNumberOfTeams >= game.number_of_teams) {
@@ -65,8 +65,7 @@ export class TeamService {
     return await this.teamRepository.find();
   }
 
-  async findAllByTeamId(game_id: number) {
-    console.log('XDASD');
+  async findAllByGameId(game_id: number) {
     const teams = await this.teamRepository.find({
       where: {
         game: {
@@ -109,7 +108,7 @@ export class TeamService {
       throw new ForbiddenException();
     }
 
-    const teams = await this.findAllByTeamId(team.game.id);
+    const teams = await this.findAllByGameId(team.game.id);
 
     if (
       updateTeamDto.name &&

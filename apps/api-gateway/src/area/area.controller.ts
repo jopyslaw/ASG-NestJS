@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   Inject,
   Post,
   Put,
@@ -41,5 +42,18 @@ export class AreaController {
   updateArea(@Body() updateAreaData: UpdateAreaDto, @Req() req) {
     const updateAreaDataWithUser = { ...updateAreaData, user_id: req.user.sub };
     return this.areaServiceClient.send('updateArea', updateAreaDataWithUser);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('find-all-area')
+  findAllArea() {
+    return this.areaServiceClient.send('findAllArea', {});
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('find-all-area-owned-by-user')
+  findAllAreasOwnedByUser(@Req() req) {
+    const userId = req.user.sub;
+    return this.areaServiceClient.send('findAllAreasOwnedByUser', userId);
   }
 }

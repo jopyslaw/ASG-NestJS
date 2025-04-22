@@ -19,6 +19,11 @@ export class ParticipantsController {
     return this.participantsService.findAll();
   }
 
+  @MessagePattern('findAllPariticipantForTeamId')
+  findAllPariticipantForTeamId(teamId: number) {
+    return this.participantsService.findAllPariticipantForTeamId(teamId);
+  }
+
   @MessagePattern('findOneParticipant')
   findOne(@Payload() id: number) {
     return this.participantsService.findOne(id);

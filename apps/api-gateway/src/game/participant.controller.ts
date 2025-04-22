@@ -2,9 +2,11 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   Inject,
   Post,
   Put,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -59,5 +61,17 @@ export class ParticipantController {
       'removeParticipant',
       deleteParticipantUpdateDataWithUserId,
     );
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('find-all-participants')
+  findAll() {
+    return this.gameServiceClient.send('findAllParticipants', {});
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('find-all-participants-for-team-id')
+  findAllPariticipantForTeamId(@Query('teamId') teamId: number) {
+    return this.gameServiceClient.send('findAllPariticipantForTeamId', teamId);
   }
 }

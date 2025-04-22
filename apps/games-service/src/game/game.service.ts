@@ -57,8 +57,25 @@ export class GameService {
     return await this.gameRepository.save(game);
   }
 
-  findAll() {
-    return `This action returns all game`;
+  async findAll() {
+    return await this.gameRepository.find({});
+  }
+
+  async findAllActiveGames() {
+    return await this.gameRepository.find({
+      where: {
+        active: true,
+      },
+    });
+  }
+
+  async findAllActiveGamesForFieldId(fieldId: number) {
+    return await this.gameRepository.find({
+      where: {
+        active: true,
+        field_id: fieldId,
+      },
+    });
   }
 
   async findAllGamesWithSameFieldId(fieldIds: number[]) {

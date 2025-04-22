@@ -42,7 +42,7 @@ export class ParticipantsService {
     }
 
     const acctualParticipantsInTeam = (
-      await this.teamService.findAllByTeamId(createParticipantDto.team_id)
+      await this.teamService.findAllByGameId(createParticipantDto.team_id)
     ).length;
 
     if (acctualParticipantsInTeam >= team.max_number_of_players) {
@@ -59,8 +59,18 @@ export class ParticipantsService {
     return await this.participantRepository.save(participant);
   }
 
-  findAll() {
-    return `This action returns all participants`;
+  async findAll() {
+    return await this.participantRepository.find({});
+  }
+
+  async findAllPariticipantForTeamId(teamId: number) {
+    return await this.participantRepository.find({
+      where: {
+        team: {
+          id: teamId,
+        },
+      },
+    });
   }
 
   async findOne(id: number) {
@@ -86,7 +96,7 @@ export class ParticipantsService {
     }
 
     const availableTeams = (
-      await this.teamService.findAllByTeamId(participant.team.game.id)
+      await this.teamService.findAllByGameId(participant.team.game.id)
     ).filter((item) => item.id !== participant.team.id);
 
     const numberOfPlayersInTeams = await Promise.all(

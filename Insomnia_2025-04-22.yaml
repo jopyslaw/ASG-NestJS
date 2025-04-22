@@ -54,7 +54,7 @@ collection:
             meta:
               id: req_362bb6d64c914f9da86c7f5cd0f99ccf
               created: 1741261535378
-              modified: 1744025234762
+              modified: 1745238038304
               isPrivate: false
               sortKey: -1744025232098
             method: POST
@@ -63,7 +63,7 @@ collection:
               text: |-
                 {
                 	"email": "konradjop00@gmail.com",
-                	"password": "test1"
+                	"password": "zaq1@WSX"
                 }
             headers:
               - name: Content-Type
@@ -111,7 +111,7 @@ collection:
             meta:
               id: req_7576d4232dea43e48c11744557cf959d
               created: 1744021055621
-              modified: 1744025231977
+              modified: 1745238004997
               isPrivate: false
               sortKey: -1744025231898
             method: POST
@@ -119,8 +119,8 @@ collection:
               mimeType: application/json
               text: >-
                 {
-                	"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJrb25yYWRqb3AwMEBnbWFpbC5jb20iLCJpYXQiOjE3NDQwMjM2MzMsImV4cCI6MTc0NDE5NjQzM30.rnsv-uylH_JvrbPaEedCkAbU4gZ0uWZ-XBrWgoyTpG8",
-                	"password": "test1"
+                	"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJrb25yYWRqb3AwMEBnbWFpbC5jb20iLCJpYXQiOjE3NDUyMzc2ODMsImV4cCI6MTc0NTQxMDQ4M30.jg6YyUccOYy-rxT9ZSWNocq3X3GhUyzJEEYUzExfmlE",
+                	"password": "zaq1@WSX"
                 }
             headers:
               - name: Content-Type
@@ -499,6 +499,170 @@ collection:
           created: 1744025296973
           modified: 1744025296973
           sortKey: -1744025296973
+        children:
+          - url: http://localhost:3000/area-info/find-all-area-info
+            name: Find All Area Info
+            meta:
+              id: req_20c71289ee864899a86271dce26baa56
+              created: 1745314917141
+              modified: 1745316350831
+              isPrivate: false
+              sortKey: -1745314917141
+            method: GET
+            headers:
+              - name: User-Agent
+                value: insomnia/11.0.2
+                id: pair_e3d9027866e04c2e9256a718da31a698
+              - id: pair_04ba8502b6ce4045a118cc5a032195b1
+                name: Authorization
+                value: Bearer {{ _.JWT_TOKEN }}
+                disabled: false
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: http://localhost:3000/area-info/find-area-info-for-area-id
+            name: Find Area Info For Area Id
+            meta:
+              id: req_86e2a5842b2c406193ffbab31c48312e
+              created: 1745315074091
+              modified: 1745316355714
+              isPrivate: false
+              sortKey: -1744673995766.5
+            method: GET
+            parameters:
+              - id: pair_5b3c6a8568b441f6875904816ee4f92f
+                name: areaId
+                value: "1"
+                disabled: false
+            headers:
+              - name: User-Agent
+                value: insomnia/11.0.2
+                id: pair_e3d9027866e04c2e9256a718da31a698
+              - id: pair_04ba8502b6ce4045a118cc5a032195b1
+                name: Authorization
+                value: Bearer {{ _.JWT_TOKEN }}
+                disabled: false
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: http://localhost:3000/area/find-all-area
+            name: Find All Area
+            meta:
+              id: req_458e6ad676c34c819467f11d41d9e837
+              created: 1745315192957
+              modified: 1745315246434
+              isPrivate: false
+              sortKey: -1744353535079.25
+            method: GET
+            parameters:
+              - id: pair_e270c6c0bb4d48bda95493f843019463
+                disabled: false
+            headers:
+              - name: User-Agent
+                value: insomnia/11.0.2
+                id: pair_e3d9027866e04c2e9256a718da31a698
+              - id: pair_04ba8502b6ce4045a118cc5a032195b1
+                name: Authorization
+                value: Bearer {{ _.JWT_TOKEN }}
+                disabled: false
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: http://localhost:3000/area/find-all-area-owned-by-user
+            name: Find All Area Owned By User
+            meta:
+              id: req_aa40c49b3925405b9d128d694ab963b9
+              created: 1745315351980
+              modified: 1745316831464
+              isPrivate: false
+              sortKey: -1744193304735.625
+            method: GET
+            headers:
+              - name: User-Agent
+                value: insomnia/11.0.2
+                id: pair_e3d9027866e04c2e9256a718da31a698
+              - id: pair_04ba8502b6ce4045a118cc5a032195b1
+                name: Authorization
+                value: Bearer {{ _.JWT_TOKEN }}
+                disabled: false
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: http://localhost:3000/field-info/find-all-field-info
+            name: Find All Field Info
+            meta:
+              id: req_9a1c3e712fb249408d1ad5ae6b4af3ef
+              created: 1745315399311
+              modified: 1745316839556
+              isPrivate: false
+              sortKey: -1744113189563.8125
+            method: GET
+            headers:
+              - name: User-Agent
+                value: insomnia/11.0.2
+                id: pair_e3d9027866e04c2e9256a718da31a698
+              - id: pair_04ba8502b6ce4045a118cc5a032195b1
+                name: Authorization
+                value: Bearer {{ _.JWT_TOKEN }}
+                disabled: false
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: http://localhost:3000/field-info/find-all-field-info-for-area-id
+            name: Find All Field Info For Area Id
+            meta:
+              id: req_d6116f82e7f141e389c71a9e6b19b00e
+              created: 1745315511980
+              modified: 1745316850866
+              isPrivate: false
+              sortKey: -1744073131977.9062
+            method: GET
+            parameters:
+              - id: pair_e270c6c0bb4d48bda95493f843019463
+                name: areaId
+                value: "2"
+                disabled: false
+            headers:
+              - name: User-Agent
+                value: insomnia/11.0.2
+                id: pair_e3d9027866e04c2e9256a718da31a698
+              - id: pair_04ba8502b6ce4045a118cc5a032195b1
+                name: Authorization
+                value: Bearer {{ _.JWT_TOKEN }}
+                disabled: false
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
   - name: users-service
     meta:
       id: fld_9d9ab4fdae5a4819b8ed74da66f541be
@@ -931,6 +1095,203 @@ collection:
                 send: true
                 store: true
               rebuildPath: true
+      - name: Get
+        meta:
+          id: fld_7bf14c262d6e4527bf7fb31c22bf30b4
+          created: 1745320824555
+          modified: 1745320824555
+          sortKey: -1745320824555
+        children:
+          - url: http://localhost:3000/game/find-all-game
+            name: Find All Game
+            meta:
+              id: req_4ba4547ac24c4282be522708eba815b3
+              created: 1745320827563
+              modified: 1745320882131
+              isPrivate: false
+              sortKey: -1745320827563
+            method: GET
+            headers:
+              - name: User-Agent
+                value: insomnia/11.0.2
+                id: pair_3a8c05ec8e874ec08cb76dd8f9320b69
+              - id: pair_e8ef545a39fa4807b2db2649d55a27ea
+                name: Authorization
+                value: Bearer {{ _.JWT_TOKEN }}
+                disabled: false
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: http://localhost:3000/game/find-all-active-game
+            name: Find All Activate Game
+            meta:
+              id: req_13120c645c494f6e87353fe09480ca02
+              created: 1745320898263
+              modified: 1745320905915
+              isPrivate: false
+              sortKey: -1745317872352
+            method: GET
+            headers:
+              - name: User-Agent
+                value: insomnia/11.0.2
+                id: pair_3a8c05ec8e874ec08cb76dd8f9320b69
+              - id: pair_e8ef545a39fa4807b2db2649d55a27ea
+                name: Authorization
+                value: Bearer {{ _.JWT_TOKEN }}
+                disabled: false
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: http://localhost:3000/game/find-all-active-game-for-field-id
+            name: Find All Activate Game For Field Id
+            meta:
+              id: req_fb465680d91240918cdf4409f3bd578b
+              created: 1745320919102
+              modified: 1745320934250
+              isPrivate: false
+              sortKey: -1745316394746.5
+            method: GET
+            parameters:
+              - id: pair_d05d699299b342c2b529a84b8dff9b51
+                name: fieldId
+                value: "1"
+                disabled: false
+            headers:
+              - name: User-Agent
+                value: insomnia/11.0.2
+                id: pair_3a8c05ec8e874ec08cb76dd8f9320b69
+              - id: pair_e8ef545a39fa4807b2db2649d55a27ea
+                name: Authorization
+                value: Bearer {{ _.JWT_TOKEN }}
+                disabled: false
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: http://localhost:3000/participant/find-all-participants
+            name: Find All Participants
+            meta:
+              id: req_acedb52b5b394dfc85412b9b6aadc786
+              created: 1745320946191
+              modified: 1745321229895
+              isPrivate: false
+              sortKey: -1745320946191
+            method: GET
+            headers:
+              - name: User-Agent
+                value: insomnia/11.0.2
+                id: pair_8f0f3bbd0b34429c9f1998bece6a104a
+              - id: pair_ad3daeaf27d64f938843e77c5125ddd1
+                name: Authorization
+                value: Bearer {{ _.JWT_TOKEN }}
+                disabled: false
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: http://localhost:3000/participant/find-all-participants-for-team-id
+            name: Find All Participants For Team Id
+            meta:
+              id: req_2b329caf88a14e0293bc9e7e082e48c2
+              created: 1745321247233
+              modified: 1745321263657
+              isPrivate: false
+              sortKey: -1745320886877
+            method: GET
+            parameters:
+              - id: pair_45b8148f60c341a8aa89051074a6cb5d
+                name: teamId
+                value: "1"
+                disabled: false
+            headers:
+              - name: User-Agent
+                value: insomnia/11.0.2
+                id: pair_8f0f3bbd0b34429c9f1998bece6a104a
+              - id: pair_ad3daeaf27d64f938843e77c5125ddd1
+                name: Authorization
+                value: Bearer {{ _.JWT_TOKEN }}
+                disabled: false
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: http://localhost:3000/team/find-all-team
+            name: Find All Team
+            meta:
+              id: req_9a0dd7bdb7c04d9da4acc9114fd9368d
+              created: 1745321285079
+              modified: 1745321327075
+              isPrivate: false
+              sortKey: -1745321285079
+            method: GET
+            headers:
+              - name: User-Agent
+                value: insomnia/11.0.2
+                id: pair_f5fd4f7ee59e42d98059f25075bd5a74
+              - id: pair_9e063cb5b9d644c2b6a834f74e128a16
+                name: Authorization
+                value: Bearer {{ _.JWT_TOKEN }}
+                disabled: false
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: http://localhost:3000/team/find-all-team-by-game-id
+            name: Find All Team By Game Id
+            meta:
+              id: req_fe93aeb7f17d4ee99a5c9f38a1e243a0
+              created: 1745321339201
+              modified: 1745321352742
+              isPrivate: false
+              sortKey: -1745321115635
+            method: GET
+            parameters:
+              - id: pair_2f14d4f7d7d84d16b09d5321c4669c49
+                name: gameId
+                value: "1"
+                disabled: false
+            headers:
+              - name: User-Agent
+                value: insomnia/11.0.2
+                id: pair_f5fd4f7ee59e42d98059f25075bd5a74
+              - id: pair_9e063cb5b9d644c2b6a834f74e128a16
+                name: Authorization
+                value: Bearer {{ _.JWT_TOKEN }}
+                disabled: false
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
 cookieJar:
   name: Default Jar
   meta:
@@ -942,7 +1303,7 @@ environments:
   meta:
     id: env_2060ac08e15c91337391a4ed3dd73b168c801bf6
     created: 1741260737340
-    modified: 1744036704569
+    modified: 1745321457113
     isPrivate: false
   data:
-    JWT_TOKEN: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImlhdCI6MTc0NDAzNjY5NiwiZXhwIjoxNzQ0MDQwMjk2fQ.OiqZPB3PLOJ_RmKKAaKw3_6EIvCMbZhRDDMIHcpkFzo
+    JWT_TOKEN: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImlhdCI6MTc0NTMyMTQyNiwiZXhwIjoxNzQ1MzI1MDI2fQ.K43Zfa2EgrCq4YPXGsmhZlbbus7Z-GVhBhLc5od07ug

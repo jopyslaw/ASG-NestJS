@@ -42,7 +42,6 @@ export class AuthService {
   }
 
   async login(userId: number) {
-    console.log(process.env.JWT_EXPIRES_IN);
     const { accessToken, refreshToken } = await this.generateTokens(userId);
     const hashedRefreshToken = await argon2.hash(refreshToken);
     await this.userService.updateHashRefreshToken(userId, hashedRefreshToken);

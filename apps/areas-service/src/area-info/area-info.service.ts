@@ -35,8 +35,18 @@ export class AreaInfoService {
     return await this.areaInfoRepository.save(areaInfo);
   }
 
-  findAll() {
-    return `This action returns all areaInfo`;
+  async findAll() {
+    return await this.areaInfoRepository.find({});
+  }
+
+  async findAreaInfoForAreaId(areaId: number) {
+    return await this.areaInfoRepository.find({
+      where: {
+        area: {
+          id: areaId,
+        },
+      },
+    });
   }
 
   async findOne(id: number) {

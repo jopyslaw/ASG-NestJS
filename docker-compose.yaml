@@ -20,3 +20,83 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: user
       RABBITMQ_DEFAULT_PASS: pass
+
+  auth-service:
+    build:
+      context: .
+      dockerfile: docker/auth.Dockerfile
+    depends_on:
+      - rabbitmq
+      - database
+    env_file:
+      - apps/auth-service/.env
+    environment:
+      - NODE_ENV=production
+      - RABBITMQ_HOST=rabbitmq
+
+  areas-service:
+    build:
+      context: .
+      dockerfile: docker/areas.Dockerfile
+    depends_on:
+      - rabbitmq
+      - database
+    env_file:
+      - apps/areas-service/.env
+    environment:
+      - NODE_ENV=production
+      - RABBITMQ_HOST=rabbitmq
+
+  games-service:
+    build:
+      context: .
+      dockerfile: docker/games.Dockerfile
+    depends_on:
+      - rabbitmq
+      - database
+    env_file:
+      - apps/games-service/.env
+    environment:
+      - NODE_ENV=production
+      - RABBITMQ_HOST=rabbitmq
+
+  notification-service:
+    build:
+      context: .
+      dockerfile: docker/notification.Dockerfile
+    depends_on:
+      - rabbitmq
+      - database
+    env_file:
+      - apps/notifications-service/.env
+    environment:
+      - NODE_ENV=production
+      - RABBITMQ_HOST=rabbitmq
+
+  users-service:
+    build:
+      context: .
+      dockerfile: docker/users.Dockerfile
+    depends_on:
+      - rabbitmq
+      - database
+    env_file:
+      - apps/users-service/.env
+    environment:
+      - NODE_ENV=production
+      - RABBITMQ_HOST=rabbitmq
+
+  gateway-service:
+    build:
+      context: .
+      dockerfile: docker/gateway.Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - rabbitmq
+      - database
+    env_file:
+      - apps/api-gateway/.env
+    environment:
+      - NODE_ENV=production
+      - RABBITMQ_HOST=rabbitmq

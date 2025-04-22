@@ -20,6 +20,16 @@ export class GameController {
     return this.gameService.findAll();
   }
 
+  @MessagePattern('findAllActiveGames')
+  findAllActiveGames() {
+    return this.gameService.findAllActiveGames();
+  }
+
+  @MessagePattern('findAllActiveGamesForFieldId')
+  findAllActiveGamesForFieldId(fieldId: number) {
+    return this.gameService.findAllActiveGamesForFieldId(fieldId);
+  }
+
   @MessagePattern('findOneGame')
   findOne(@Payload() id: number) {
     return this.gameService.findOne(id);

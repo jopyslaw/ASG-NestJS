@@ -2,9 +2,12 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   Inject,
+  Param,
   Post,
   Put,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -68,5 +71,17 @@ export class FieldInfoController {
       'updateFieldInfo',
       updateFieldInfoDataWithUser,
     );
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('find-all-field-info')
+  findAllFieldInfo() {
+    return this.fieldInfoServiceClient.send('findAllFieldInfo', {});
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('find-all-field-info-for-area-id')
+  findAllFieldsForAreaId(@Query('areaId') areaId: number) {
+    return this.fieldInfoServiceClient.send('findAllFieldsForAreaId', areaId);
   }
 }

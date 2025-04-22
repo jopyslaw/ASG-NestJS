@@ -24,6 +24,11 @@ export class AreaController {
     return this.areaService.findAll();
   }
 
+  @MessagePattern('findAllAreasOwnedByUser')
+  findAllAreasOwnedByUser(userId: number) {
+    return this.areaService.findAllAreasOwnedByUser(userId);
+  }
+
   @MessagePattern('findOneArea')
   findOne(@Payload() id: number) {
     return this.areaService.findOne(id);
@@ -31,7 +36,6 @@ export class AreaController {
 
   @MessagePattern('updateArea')
   update(@Payload() updateAreaDto: UpdateAreaDto) {
-    console.log(updateAreaDto);
     return this.areaService.update(updateAreaDto.id, updateAreaDto);
   }
 

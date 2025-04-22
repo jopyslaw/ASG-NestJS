@@ -19,6 +19,11 @@ export class TeamController {
     return this.teamService.findAll();
   }
 
+  @MessagePattern('findAllByGameId')
+  findAllByGameId(gameId: number) {
+    return this.teamService.findAllByGameId(gameId);
+  }
+
   @MessagePattern('findOneTeam')
   findOne(@Payload() id: number) {
     return this.teamService.findOne(id);

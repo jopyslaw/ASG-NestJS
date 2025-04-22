@@ -35,8 +35,33 @@ export class AreaService {
     return await this.areaRepository.save(area);
   }
 
-  findAll() {
-    return `This action returns all area`;
+  async findAll() {
+    return await this.areaRepository.find({
+      relations: ['area_info'],
+      select: [
+        'id',
+        'coordinates_of_place',
+        'name',
+        'number_of_fields',
+        'area_info',
+      ],
+    });
+  }
+
+  async findAllAreasOwnedByUser(userId: number) {
+    return await this.areaRepository.find({
+      where: {
+        owner_id: userId,
+      },
+      relations: ['area_info'],
+      select: [
+        'id',
+        'coordinates_of_place',
+        'name',
+        'number_of_fields',
+        'area_info',
+      ],
+    });
   }
 
   async findOne(id: number) {
@@ -69,7 +94,6 @@ export class AreaService {
   }
 
   async update(id: number, updateAreaDto: UpdateAreaDto) {
-    console.log(updateAreaDto);
     if (!this.checkIfAreaOwner(updateAreaDto.user_id, id)) {
       throw new ForbiddenException();
     }
@@ -77,8 +101,6 @@ export class AreaService {
     const area = await this.findOne(id);
 
     const { user_id, ...updateAreaDtoWithoutUser } = updateAreaDto;
-
-    console.log(user_id);
 
     return await this.areaRepository.update(
       {
@@ -120,16 +142,12 @@ export class AreaService {
   }
 
   async checkIfAreaOwner(userId: number, areaId: number) {
-    console.log(userId, areaId);
-
     const area = await this.areaRepository.findOne({
       where: {
         id: areaId,
         owner_id: userId,
       },
     });
-
-    console.log(area);
 
     if (!area) {
       throw new NotFoundException();

@@ -27,15 +27,15 @@ export class AuthController {
   }
 
   @UseGuards(RefreshAuthGuard)
-  @Post('refresh')
+  @MessagePattern('refreshToken')
   refreshToken(@Req() req) {
     return this.authService.refreshToken(req.user.id);
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post('signout')
+  @MessagePattern('signOut')
   signOut(@Req() req) {
-    this.authService.signOut(req.user.id);
+    return this.authService.signOut(req.user.id);
   }
 
   @MessagePattern('forgotPassword')

@@ -22,7 +22,6 @@ import jwtResetPasswordConfig from './config/jwt-reset-password.config';
     ConfigModule.forFeature(jwtConfig),
     ConfigModule.forFeature(refreshJwtConfig),
     ConfigModule.forFeature(jwtResetPasswordConfig),
-    UserModule,
   ],
   controllers: [AuthController],
   providers: [
